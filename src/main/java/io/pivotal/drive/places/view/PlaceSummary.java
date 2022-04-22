@@ -1,4 +1,4 @@
-package io.pivotal.drive.view;
+package io.pivotal.drive.places.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;

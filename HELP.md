@@ -22,3 +22,21 @@ These additional references should also help you:
 
 * [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
 
+### Run MySQL in Docker
+```
+docker run --name=mysql-db -e MYSQL_ROOT_PASSWORD=admin -e MYSQL_DATABASE=placesdb -p3306:3306 -d mysql/mysql-server:latest
+docker container exec -it mysql-db bash
+mysql -uroot -padmin
+```
+
+```
+CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+
+GRANT ALL PRIVILEGES ON *.* TO 'username'@'localhost' WITH GRANT OPTION;
+
+CREATE USER 'username'@'%' IDENTIFIED BY 'password';
+
+GRANT ALL PRIVILEGES ON *.* TO 'username'@'%' WITH GRANT OPTION;
+
+FLUSH PRIVILEGES;
+```

@@ -1,6 +1,6 @@
-package io.pivotal.drive.mediatype;
+package io.pivotal.drive.places.view;
 
-import io.pivotal.drive.view.PlaceSummary;
+import io.pivotal.drive.mediatype.DriveResource;
 import lombok.Builder;
 import lombok.Getter;
 

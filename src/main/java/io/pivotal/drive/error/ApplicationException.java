@@ -2,7 +2,6 @@ package io.pivotal.drive.error;
 
 import org.springframework.http.HttpStatus;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class ApplicationException extends RuntimeException {
@@ -12,7 +11,7 @@ public class ApplicationException extends RuntimeException {
     private List<ApiError> errors;
 
     public ApplicationException(HttpStatus status, ApiError error) {
-        this(status, Arrays.asList(error));
+        this(status, List.of(error));
     }
 
     public ApplicationException(HttpStatus status, List<ApiError> errors) {

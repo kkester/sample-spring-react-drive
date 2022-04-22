@@ -1,4 +1,4 @@
-package io.pivotal.drive.view;
+package io.pivotal.drive.places.view;
 
 import lombok.Builder;
 import lombok.Data;
