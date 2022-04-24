@@ -38,4 +38,8 @@ public class GameEntity {
 
     @NotNull
     private LocalDateTime gameTime;
+
+    public TeamEntity getOpponentFor(TeamEntity team) {
+        return homeTeam.getId().equals(team.getId()) ? visitingTeam : homeTeam;
+    }
 }

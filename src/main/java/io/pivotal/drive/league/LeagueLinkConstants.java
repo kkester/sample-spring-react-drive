@@ -12,7 +12,7 @@ public interface LeagueLinkConstants {
             .build();
     DriveLink TEAM_LINK = DriveLink.builder()
             .href("/teams/%s")
-            .title("Teams")
+            .title("Team")
             .build();
     DriveLink GAMES_LINK = DriveLink.builder()
             .href("/games")
@@ -30,9 +30,13 @@ public interface LeagueLinkConstants {
             .href("/teams/%s/games")
             .title("Games")
             .build();
-    DriveLink TEAM_PLAYERS_LINK = DriveLink.builder()
+    DriveLink TEAM_PLAYER_STATS_LINK = DriveLink.builder()
             .href("/teams/%s/players")
             .title("Players")
+            .build();
+    DriveLink TEAM_ROSTER_LINK = DriveLink.builder()
+            .href("/teams/%s/roster")
+            .title("Roster")
             .build();
 
     Map<String, DriveLink> MAIN_LINKS = Map.of(

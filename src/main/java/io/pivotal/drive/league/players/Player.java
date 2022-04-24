@@ -5,17 +5,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Builder
 @ToString
-public class PlayerSummary {
+public class Player {
     @JsonIgnore
-    private UUID id;
-    private String name;
-    private LocalDate birthDate;
-    private String homeTown;
-    private String homeState;
+    private UUID teamId;
+    private String teamName;
+    private PlayerInfo info;
+    private PlayerStats stats;
+    private List<PlayerGameStats> games;
 }

@@ -8,5 +8,4 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TeamRepository extends JpaRepository<TeamEntity, UUID> {
-    List<TeamEntity> findByOrderByTotalGames();
 }

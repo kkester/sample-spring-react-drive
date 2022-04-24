@@ -1,9 +1,9 @@
 package io.pivotal.drive.league.games;
 
 import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
-import io.pivotal.drive.league.model.GameEntity;
 import io.pivotal.drive.mediatype.DriveLink;
 import io.pivotal.drive.mediatype.DriveResource;
+import io.pivotal.drive.mediatype.DriveResourceList;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static io.pivotal.drive.league.LeagueLinkConstants.*;
+import static io.pivotal.drive.league.LeagueLinkConstants.GAMES_LINK;
+import static io.pivotal.drive.league.LeagueLinkConstants.HOME_LINK;
 
 @RestController
 @CrossOrigin("*")
@@ -27,8 +27,9 @@ public class GamesController {
     private final GameSummariesResourceGenerator gameSummariesResourceGenerator;
 
     @GetMapping("/teams/{teamId}/games")
-    public List<GameEntity> getTeamGames(@PathVariable UUID teamId) {
-        return gamesService.getTeamGames(teamId);
+    public DriveResourceList<GameSummary> getTeamGames(@PathVariable UUID teamId) {
+        GameSummaries gameSummaries = gamesService.getTeamGames(teamId);
+        return gameSummariesResourceGenerator.generateDriveResource(teamId, gameSummaries);
     }
 
     @GetMapping("/games/{gameId}")
@@ -44,8 +45,8 @@ public class GamesController {
 
     @GetMapping("/games")
     @SneakyThrows
-    public DriveResource<GameSummariesDriveResource> getGames() {
-        GameSummaries gamesSummaries = gamesService.getLatestGames();
-        return gameSummariesResourceGenerator.generateDriveResource(gamesSummaries);
+    public DriveResourceList<GameSummary> getGames() {
+        GameSummaries gameSummaries = gamesService.getLatestGames();
+        return gameSummariesResourceGenerator.generateDriveResource(gameSummaries);
     }
 }

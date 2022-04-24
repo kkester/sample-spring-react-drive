@@ -1,25 +1,19 @@
 package io.pivotal.drive.league.players;
 
 import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
-import io.pivotal.drive.league.games.GameSummaries;
-import io.pivotal.drive.league.model.PlayerEntity;
-import io.pivotal.drive.league.model.TeamEntity;
-import io.pivotal.drive.league.repositories.GameRepository;
-import io.pivotal.drive.league.repositories.PlayerRepository;
-import io.pivotal.drive.league.repositories.TeamRepository;
 import io.pivotal.drive.mediatype.DriveResource;
+import io.pivotal.drive.mediatype.DriveResourceList;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
-import static io.pivotal.drive.league.LeagueLinkConstants.MAIN_LINKS;
+import static io.pivotal.drive.league.LeagueLinkConstants.*;
 
 @RestController
 @CrossOrigin("*")
@@ -27,21 +21,39 @@ import static io.pivotal.drive.league.LeagueLinkConstants.MAIN_LINKS;
 public class PlayersController {
 
     private final PlayersService playersService;
+    private final PlayerSummariesResourceGenerator resourceGenerator;
     private final JsonSchemaGenerator schemaGenerator;
 
     @GetMapping("/teams/{teamId}/players")
-    public List<PlayerEntity> getTeamPlayers(@PathVariable UUID teamId) {
-        return playersService.getPlayersForTeam(teamId);
+    public DriveResourceList<PlayerStatsSummary> getTeamPlayers(@PathVariable UUID teamId) {
+        PlayerStatsSummaries playerStatsSummaries = playersService.getPlayersForTeam(teamId);
+        return resourceGenerator.generateTeamPlayersResource(teamId, playerStatsSummaries);
+    }
+
+    @GetMapping("/teams/{teamId}/roster")
+    public DriveResourceList<PlayerSummary> getTeamRoster(@PathVariable UUID teamId) {
+        PlayerSummaries playerSummaries = playersService.getRosterForTeam(teamId);
+        return resourceGenerator.generateTeamRosterResource(teamId, playerSummaries);
     }
 
     @GetMapping("/players")
+    public DriveResourceList<PlayerStatsSummary> getPlayers() {
+        PlayerStatsSummaries playerStatsSummaries = playersService.getAllPlayers();
+        return resourceGenerator.generateAllPlayersResource(playerStatsSummaries);
+    }
+
+    @GetMapping("/players/{playerId}")
     @SneakyThrows
-    public DriveResource<PlayerSummaries> getPlayers() {
-        PlayerSummaries gamesSummaries = playersService.getLatestGames();
-        return DriveResource.<PlayerSummaries>builder()
-                .links(MAIN_LINKS)
-                .data(gamesSummaries)
-                .schema(schemaGenerator.generateSchema(PlayerSummaries.class))
+    public DriveResource<Player> getPlayerById(@PathVariable UUID playerId) {
+        Player player = playersService.getPlayerById(playerId);
+        return DriveResource.<Player>builder()
+                .links(Map.of(
+                        "home", HOME_LINK,
+                        "team", TEAM_LINK.format(player.getTeamId()),
+                        "players", PLAYERS_LINK
+                ))
+                .data(player)
+                .schema(schemaGenerator.generateSchema(Player.class))
                 .build();
     }
 

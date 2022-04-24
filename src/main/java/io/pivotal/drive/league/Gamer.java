@@ -11,6 +11,7 @@ import io.pivotal.drive.league.repositories.PlayerRepository;
 import io.pivotal.drive.league.repositories.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -36,8 +37,8 @@ public class Gamer {
         }
         log.info("Initiating game between {} and {} ", game.getHomeTeam(), game.getVisitingTeam());
 
-        List<PlayerEntity> homePlayers = playerRepository.findAllByTeamId(game.getHomeTeam().getId());
-        List<PlayerEntity> visitingPlayers = playerRepository.findAllByTeamId(game.getVisitingTeam().getId());
+        List<PlayerEntity> homePlayers = playerRepository.findAllByTeamId(game.getHomeTeam().getId(), Sort.by(Sort.Direction.DESC, "points"));
+        List<PlayerEntity> visitingPlayers = playerRepository.findAllByTeamId(game.getVisitingTeam().getId(), Sort.by(Sort.Direction.DESC, "points"));
 
         playGame(homePlayers, visitingPlayers, game);
 
@@ -45,7 +46,7 @@ public class Gamer {
     }
 
     private GameEntity selectTeams() {
-        List<TeamEntity> teams = teamRepository.findByOrderByTotalGames();
+        List<TeamEntity> teams = teamRepository.findAll(Sort.by("totalGames", "wins"));
         TeamEntity homeTeamEntity = teams.get(0);
         teams.remove(homeTeamEntity);
         if (homeTeamEntity.getTotalGames() >= 50) {

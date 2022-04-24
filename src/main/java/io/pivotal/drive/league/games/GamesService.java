@@ -14,8 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,8 +25,20 @@ public class GamesService {
     private final GameRepository gameRepository;
     private final PlayRepository playRepository;
 
-    public List<GameEntity> getTeamGames(UUID teamId) {
-        return null;
+    public GameSummaries getTeamGames(UUID teamId) {
+        List<GameSummary> games = gameRepository.findAllByHomeTeamIdOrVisitingTeamId(teamId, teamId, Sort.by(Sort.Direction.DESC, "gameTime")).stream()
+                .map(gameEntity -> GameSummary.builder()
+                        .id(gameEntity.getId())
+                        .home(gameEntity.getHomeTeam().getName())
+                        .homePoints(gameEntity.getHomeTeamPoints())
+                        .visitor(gameEntity.getVisitingTeam().getName())
+                        .visitorPoints(gameEntity.getVisitingTeamPoints())
+                        .gameTime(gameEntity.getGameTime())
+                        .build())
+                .collect(Collectors.toList());
+        return GameSummaries.builder()
+                .games(games)
+                .build();
     }
 
     public GameSummaries getLatestGames() {
@@ -69,5 +79,19 @@ public class GamesService {
                                 .build())
                         .collect(Collectors.toList()))
                 .build();
+    }
+
+    public List<GameSummary> getLatestResults() {
+        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "gameTime"));
+        Page<GameSummary> gamesPage = gameRepository.findAll(pageable)
+                .map(gameEntity -> GameSummary.builder()
+                        .id(gameEntity.getId())
+                        .home(gameEntity.getHomeTeam().getName())
+                        .homePoints(gameEntity.getHomeTeamPoints())
+                        .visitor(gameEntity.getVisitingTeam().getName())
+                        .visitorPoints(gameEntity.getVisitingTeamPoints())
+                        .gameTime(gameEntity.getGameTime())
+                        .build());
+        return gamesPage.getContent();
     }
 }

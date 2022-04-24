@@ -8,10 +8,12 @@ import lombok.*;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 public class DriveLink {
     private String rel;
     private String href;
@@ -24,5 +26,11 @@ public class DriveLink {
     @JsonGetter("type")
     public String getType() {
         return type == null ? null : type.toString();
+    }
+
+    public DriveLink format(Object pathVariable) {
+        return toBuilder()
+                .href(String.format(this.href, pathVariable))
+                .build();
     }
 }
