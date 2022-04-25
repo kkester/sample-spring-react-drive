@@ -17,5 +17,6 @@ public class Team {
     private TeamStanding standing;
     private int pointsFor;
     private int pointsAgainst;
+    private double averagePlayerRating;
     private List<PlayerStatsSummary> topPlayers;
 }

@@ -7,10 +7,14 @@ import io.pivotal.drive.league.model.PlayerEntity;
 import io.pivotal.drive.league.repositories.PlayRepository;
 import io.pivotal.drive.league.repositories.PlayerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -19,6 +23,7 @@ import static java.util.Arrays.asList;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PlayersService {
 
     public static final Sort POINTS_SORT = Sort.by(Sort.Direction.DESC, "points");
@@ -97,6 +102,7 @@ public class PlayersService {
                                 .points(play.isScored() ? 1 : 0)
                                 .gameTime(play.getGame().getGameTime())
                                 .build())
+                        .sorted(Comparator.comparing(PlayerGameStats::getGameTime).reversed())
                         .collect(Collectors.toList()))
                 .build();
     }
@@ -109,5 +115,13 @@ public class PlayersService {
     public List<PlayerStatsSummary> getTopPlayers() {
         List<PlayerStatsSummary> players = getAllPlayers().getPlayers();
         return asList(players.get(0), players.get(1), players.get(2));
+    }
+
+    public double getAveragePlayerRating(UUID teamId) {
+        BigDecimal totalRating = BigDecimal.valueOf(getPlayersForTeam(teamId).getPlayers().stream()
+                .map(PlayerStatsSummary::getRating)
+                .mapToInt(Integer::intValue)
+                .sum());
+        return totalRating.divide(BigDecimal.valueOf(10), 1, RoundingMode.HALF_DOWN).doubleValue();
     }
 }

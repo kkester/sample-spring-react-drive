@@ -94,7 +94,6 @@ public class Gamer {
 
     private void processScored(GameEntity game, PlayerEntity player, boolean home, Integer chance) {
         log.info("{} Player {} with rating {} scores!!! on chance {}", home ? "Home" : "Visitor", player.getName(), player.getRating(), chance);
-        player.setScored(true);
         if (player.getRating() == 2) {
             player.setRating(5);
         } else if (player.isScored() && player.getRating() < 8) {
@@ -109,6 +108,7 @@ public class Gamer {
         } else {
             game.setVisitingTeamPoints(game.getVisitingTeamPoints() + 1);
         }
+        player.setScored(true);
     }
 
     private void processMissedShot(PlayerEntity player, boolean home, Integer chance) {
