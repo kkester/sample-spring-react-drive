@@ -2,10 +2,13 @@ package io.pivotal.drive.league.games;
 
 import io.pivotal.drive.error.ApiError;
 import io.pivotal.drive.error.ApplicationException;
+import io.pivotal.drive.league.games.view.*;
 import io.pivotal.drive.league.model.GameEntity;
 import io.pivotal.drive.league.model.PlayEntity;
+import io.pivotal.drive.league.model.TeamEntity;
 import io.pivotal.drive.league.repositories.GameRepository;
 import io.pivotal.drive.league.repositories.PlayRepository;
+import io.pivotal.drive.league.repositories.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,13 +25,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GamesService {
 
+    public static final String GAME_TIME_PROPERTY_NAME = "gameTime";
+
+    private final TeamRepository teamRepository;
     private final GameRepository gameRepository;
     private final PlayRepository playRepository;
 
-    public GameSummaries getTeamGames(UUID teamId) {
-        List<GameSummary> games = gameRepository.findAllByHomeTeamIdOrVisitingTeamId(teamId, teamId, Sort.by(Sort.Direction.DESC, "gameTime")).stream()
-                .map(gameEntity -> GameSummary.builder()
+    public TeamGameSummaries getTeamGames(UUID teamId) {
+        TeamEntity teamEntity = teamRepository.findById(teamId)
+                .orElseThrow(() -> new ApplicationException(HttpStatus.NOT_FOUND, ApiError.builder().build()));
+        List<TeamGameSummary> games = gameRepository.findAllByHomeTeamIdOrVisitingTeamId(teamId, teamId, Sort.by(Sort.Direction.DESC, GAME_TIME_PROPERTY_NAME)).stream()
+                .map(gameEntity -> TeamGameSummary.builder()
                         .id(gameEntity.getId())
+                        .result(determineResult(teamId, gameEntity))
                         .home(gameEntity.getHomeTeam().getName())
                         .homePoints(gameEntity.getHomeTeamPoints())
                         .visitor(gameEntity.getVisitingTeam().getName())
@@ -36,13 +45,23 @@ public class GamesService {
                         .gameTime(gameEntity.getGameTime())
                         .build())
                 .collect(Collectors.toList());
-        return GameSummaries.builder()
+        return TeamGameSummaries.builder()
+                .teamName(teamEntity.getName())
                 .games(games)
                 .build();
     }
 
+    private String determineResult(UUID teamId, GameEntity gameEntity) {
+        if (gameEntity.getHomeTeamPoints() == gameEntity.getVisitingTeamPoints()) {
+            return "T";
+        } else if (teamId.equals(gameEntity.getHomeTeam().getId())) {
+            return gameEntity.getHomeTeamPoints() > gameEntity.getVisitingTeamPoints() ? "W" : "L";
+        }
+        return gameEntity.getVisitingTeamPoints() > gameEntity.getHomeTeamPoints() ? "W" : "L";
+    }
+
     public GameSummaries getLatestGames() {
-        Pageable pageable = PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "gameTime"));
+        Pageable pageable = PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, GAME_TIME_PROPERTY_NAME));
         Page<GameSummary> gamesPage = gameRepository.findAll(pageable)
                 .map(gameEntity -> GameSummary.builder()
                         .id(gameEntity.getId())
@@ -82,7 +101,7 @@ public class GamesService {
     }
 
     public List<GameSummary> getLatestResults() {
-        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "gameTime"));
+        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, GAME_TIME_PROPERTY_NAME));
         Page<GameSummary> gamesPage = gameRepository.findAll(pageable)
                 .map(gameEntity -> GameSummary.builder()
                         .id(gameEntity.getId())

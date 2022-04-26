@@ -2,6 +2,8 @@ package io.pivotal.drive.league.standings;
 
 import io.pivotal.drive.league.model.TeamEntity;
 import io.pivotal.drive.league.repositories.TeamRepository;
+import io.pivotal.drive.league.standings.view.Standings;
+import io.pivotal.drive.league.standings.view.TeamStanding;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

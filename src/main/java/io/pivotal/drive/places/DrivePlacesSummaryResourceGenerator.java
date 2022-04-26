@@ -18,7 +18,7 @@ import static io.pivotal.drive.places.PlaceLinkConstants.*;
 @RequiredArgsConstructor
 public class DrivePlacesSummaryResourceGenerator {
 
-    private final SchemaGenerator schemaGenerator;
+    private final PlaceTypesSchemaGenerator schemaGenerator;
 
     public DriveResource<PlaceSummariesDriveResource> generateDriveResource(PlaceSummaries placeSummaries, boolean visited) {
         DriveLink createLink = DriveLink.builder()

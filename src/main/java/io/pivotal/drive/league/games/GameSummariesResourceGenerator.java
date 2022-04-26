@@ -1,63 +1,44 @@
 package io.pivotal.drive.league.games;
 
-import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
-import io.pivotal.drive.mediatype.DriveLink;
+import io.pivotal.drive.league.games.view.GameSummaries;
+import io.pivotal.drive.league.games.view.GameSummary;
+import io.pivotal.drive.league.games.view.TeamGameSummaries;
+import io.pivotal.drive.league.games.view.TeamGameSummary;
+import io.pivotal.drive.mediatype.DriveDataResource;
 import io.pivotal.drive.mediatype.DriveResource;
-import io.pivotal.drive.mediatype.DriveResourceList;
+import io.pivotal.drive.mediatype.DriveResourceGenerator;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-import static io.pivotal.drive.league.LeagueLinkConstants.*;
+import static io.pivotal.drive.league.LeagueLinkConstants.MAIN_LINKS;
+import static io.pivotal.drive.league.games.GameLinkConstants.gameViewLink;
+import static io.pivotal.drive.league.teams.TeamLinkConstants.teamLinks;
 
 @Component
 @RequiredArgsConstructor
 public class GameSummariesResourceGenerator {
 
-    private final JsonSchemaGenerator schemaGenerator;
+    private static final String GAMES_KEY = "games";
 
-    @SneakyThrows
-    public DriveResourceList<GameSummary> generateDriveResource(GameSummaries gameSummaries) {
-        return generateDriveResource(MAIN_LINKS, gameSummaries);
-    }
+    private final DriveResourceGenerator driveResourceGenerator;
 
-    @SneakyThrows
-    public DriveResourceList<GameSummary> generateDriveResource(UUID teamId, GameSummaries gameSummaries) {
-        Map<String, DriveLink> links = Map.of(
-                "home", HOME_LINK,
-                "team", TEAM_LINK.format(teamId)
+    public DriveDataResource generateTeamGameSummariesResource(UUID teamId, TeamGameSummaries gameSummaries) {
+        List<DriveResource<TeamGameSummary>> resources = driveResourceGenerator.createDriveResourceList(
+                gameSummaries.getGames(), game -> gameViewLink(game.getId()));
+        Map<String, Object> data = Map.of(
+                "teamName", gameSummaries.getTeamName(),
+                GAMES_KEY, resources
         );
-        return generateDriveResource(links, gameSummaries);
+        return driveResourceGenerator.createDriveDataResource(teamLinks(teamId), data, TeamGameSummaries.class);
     }
 
-    @SneakyThrows
-    private DriveResourceList<GameSummary> generateDriveResource(Map<String,DriveLink> links, GameSummaries gameSummaries) {
-        List<DriveResource<GameSummary>> gameSummariesList = gameSummaries.getGames().stream()
-                .map(this::convert)
-                .collect(Collectors.toList());
-
-        return DriveResourceList.<GameSummary>builder()
-                .links(links)
-                .data(Map.of("games", gameSummariesList))
-                .schema(schemaGenerator.generateSchema(GameSummaries.class))
-                .build();
-    }
-
-    private DriveResource<GameSummary> convert(GameSummary gameSummary) {
-        Map<String, DriveLink> links = Map.of(
-                "game", DriveLink.builder()
-                        .href("/games/" + gameSummary.getId())
-                        .title("View")
-                        .build()
-        );
-        return DriveResource.<GameSummary>builder()
-                .links(links)
-                .data(gameSummary)
-                .build();
+    public DriveDataResource generateDriveResource(GameSummaries gameSummaries) {
+        List<DriveResource<GameSummary>> resources = driveResourceGenerator.createDriveResourceList(
+                gameSummaries.getGames(), game -> gameViewLink(game.getId()));
+        return driveResourceGenerator.createDriveDataResource(MAIN_LINKS, Map.of(GAMES_KEY, resources), GameSummaries.class);
     }
 }

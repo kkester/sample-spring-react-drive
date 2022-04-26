@@ -1,4 +1,4 @@
-package io.pivotal.drive.league.standings;
+package io.pivotal.drive.league.players.view;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -9,6 +9,6 @@ import java.util.List;
 @Getter
 @Builder
 @ToString
-public class Standings {
-    List<TeamStanding> teams;
+public class PlayerSummaries {
+    private List<PlayerSummary> players;
 }

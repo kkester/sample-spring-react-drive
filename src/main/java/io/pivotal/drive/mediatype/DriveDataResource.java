@@ -8,8 +8,8 @@ import java.util.Map;
 
 @Getter
 @Builder
-public class DriveResource<T> {
+public class DriveDataResource {
     private Map<String, DriveLink> links;
-    private T data;
+    private Map<String,Object> data;
     private JsonNode schema;
 }

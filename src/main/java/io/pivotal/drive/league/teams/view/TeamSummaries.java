@@ -1,4 +1,4 @@
-package io.pivotal.drive.league.teams;
+package io.pivotal.drive.league.teams.view;
 
 import lombok.Builder;
 import lombok.Getter;

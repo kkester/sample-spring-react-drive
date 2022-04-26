@@ -4,13 +4,14 @@ import io.pivotal.drive.error.ApiError;
 import io.pivotal.drive.error.ApplicationException;
 import io.pivotal.drive.league.model.GameEntity;
 import io.pivotal.drive.league.model.TeamEntity;
-import io.pivotal.drive.league.players.PlayerStatsSummary;
 import io.pivotal.drive.league.players.PlayersService;
+import io.pivotal.drive.league.players.view.TeamPlayerStatsSummary;
 import io.pivotal.drive.league.repositories.GameRepository;
-import io.pivotal.drive.league.repositories.PlayerRepository;
 import io.pivotal.drive.league.repositories.TeamRepository;
-import io.pivotal.drive.league.standings.Standings;
-import io.pivotal.drive.league.standings.TeamStanding;
+import io.pivotal.drive.league.teams.view.Team;
+import io.pivotal.drive.league.teams.view.TeamRecord;
+import io.pivotal.drive.league.teams.view.TeamSummaries;
+import io.pivotal.drive.league.teams.view.TeamSummary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -37,7 +38,16 @@ public class TeamService {
         int pointsFor = sumPointsFor(games, teamId);
         int pointsAgainst = sumPointsAgainst(games, teamId);
 
-        List<PlayerStatsSummary> topPlayers = playersService.getTopPlayerForTeam(teamId);
+        List<TeamPlayerStatsSummary> topPlayers = playersService.getTopPlayerForTeam(teamId).stream()
+                .map(player -> TeamPlayerStatsSummary.builder()
+                        .id(player.getId())
+                        .highestRating(player.getHighestRating())
+                        .lowestRating(player.getLowestRating())
+                        .rating(player.getRating())
+                        .name(player.getName())
+                        .points(player.getPoints())
+                        .build())
+                .collect(Collectors.toList());
         double avgRating = playersService.getAveragePlayerRating(teamId);
         return Team.builder()
                 .name(teamEntity.getName())
@@ -46,8 +56,7 @@ public class TeamService {
                 .pointsAgainst(pointsAgainst)
                 .topPlayers(topPlayers)
                 .averagePlayerRating(avgRating)
-                .standing(TeamStanding.builder()
-                        .teamName(teamEntity.getName())
+                .standing(TeamRecord.builder()
                         .wins(teamEntity.getWins())
                         .loses(teamEntity.getLosses())
                         .ties(teamEntity.getTies())
@@ -73,7 +82,7 @@ public class TeamService {
 
     public TeamSummaries getAllTeams() {
         List<TeamSummary> teams = teamRepository.findAll().stream()
-                .map(teamEntity -> convertToTeamSummary(teamEntity))
+                .map(this::convertToTeamSummary)
                 .sorted(Comparator.comparing(TeamSummary::getPoints).reversed())
                 .collect(Collectors.toList());
         return TeamSummaries.builder().teams(teams).build();
