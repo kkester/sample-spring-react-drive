@@ -1,0 +1,38 @@
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.Component-table-layout-label {
+  color: #d2d0d0ec;
+}
+
+.Component-table-layout {
+  padding: 1%;
+}
+
+table {
+  font-family: arial, sans-serif;
+  font-size: 1rem;
+  border-collapse: collapse;
+  width: 100%;
+  color: #d2d0d0ec;
+}
+
+th {
+  border: 1px solid #4416e9;
+  text-align: left;
+  padding: 8px;
+}
+
+td {
+  border: 1px solid #4416e9;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #7c787890;
+}
