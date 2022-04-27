@@ -17,6 +17,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Json Schema v4 Generator
+    implementation 'com.kjetland:mbknor-jackson-jsonschema_2.12:1.0.39'
 
     implementation 'com.github.javafaker:javafaker:1.0.2'
     runtimeOnly 'com.h2database:h2'

@@ -1,19 +1,28 @@
 package io.pivotal.places.view;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.kjetland.jackson.jsonSchema.annotations.JsonSchemaTitle;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Builder
 @ToString
 public class NewPlace {
-    @JsonProperty(required = true)
+    @JsonSchemaTitle("City")
+    @NotNull
     private String city;
-    @JsonProperty(required = true)
+
+    @JsonSchemaTitle("State")
+    @NotNull
     private States state;
-    @JsonProperty(required = true)
+
+    @JsonSchemaTitle("Country")
+    @NotNull
     private String country;
+
+    @JsonSchemaTitle("Description")
     private String description;
 }

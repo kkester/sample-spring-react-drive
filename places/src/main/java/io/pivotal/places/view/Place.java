@@ -2,10 +2,12 @@ package io.pivotal.places.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.kjetland.jackson.jsonSchema.annotations.JsonSchemaTitle;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -15,13 +17,24 @@ import java.util.UUID;
 public class Place {
     @JsonIgnore
     private UUID id;
-    @JsonProperty(required = true)
+
+    @JsonSchemaTitle("City")
+    @NotNull
     private String city;
-    @JsonProperty(required = true)
+
+    @JsonSchemaTitle("State")
+    @NotNull
     private States state;
-    @JsonProperty(required = true)
+
+    @JsonSchemaTitle("Country")
+    @NotNull
     private String country;
+
+    @JsonSchemaTitle("Description")
     private String description;
+
+    @JsonSchemaTitle("Date Visited")
     private LocalDate visited;
+
     private AuditDetails auditDetails;
 }

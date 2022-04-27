@@ -1,7 +1,8 @@
 package io.pivotal.places.view;
 
 public enum States {
-    TX,
+    MA,
+    MN,
     NC,
-    MN
+    TX
 }

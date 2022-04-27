@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableAutoConfiguration
-@ComponentScan(basePackages = {"io.pivotal.drive"})
+@ComponentScan(basePackages = {"io.pivotal.drive", "io.pivotal.places"})
 public class PlacesApplication {
 
 	public static void main(String[] args) {

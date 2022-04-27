@@ -1,11 +1,10 @@
 package io.pivotal.places;
 
+import io.pivotal.drive.mediatype.DriveDataResource;
 import io.pivotal.drive.mediatype.DriveMediaType;
-import io.pivotal.drive.mediatype.DriveResource;
 import io.pivotal.places.view.NewPlace;
 import io.pivotal.places.view.Place;
 import io.pivotal.places.view.PlaceSummaries;
-import io.pivotal.places.view.PlaceSummariesDriveResource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -22,19 +21,19 @@ public class PlaceSummariesController {
     private final DrivePlacesSummaryResourceGenerator resourceGenerator;
 
     @GetMapping(value = "/visited-places", produces = DriveMediaType.APPLICATION_DRIVE_PLUS_JSON_VALUE)
-    public DriveResource<PlaceSummariesDriveResource> getVisitedPlaces() {
+    public DriveDataResource getVisitedPlaces() {
         PlaceSummaries placeSummaries = placesService.getPlacesVisited();
         return resourceGenerator.generateDriveResource(placeSummaries, true);
     }
 
     @GetMapping(value = "/non-visited-places", produces = DriveMediaType.APPLICATION_DRIVE_PLUS_JSON_VALUE)
-    public DriveResource<PlaceSummariesDriveResource> getNonVisitedPlaces() {
+    public DriveDataResource getNonVisitedPlaces() {
         PlaceSummaries placeSummaries = placesService.getPlacesToVisit();
         return resourceGenerator.generateDriveResource(placeSummaries, false);
     }
 
     @PostMapping(value = "/places", produces = DriveMediaType.APPLICATION_DRIVE_PLUS_JSON_VALUE)
-    public DriveResource<PlaceSummariesDriveResource> savePlace(@RequestBody NewPlace place) {
+    public DriveDataResource savePlace(@RequestBody NewPlace place) {
         log.info("Saving place {}", place);
         placesService.save(place);
         PlaceSummaries placeSummaries = placesService.getPlacesToVisit();
@@ -42,7 +41,7 @@ public class PlaceSummariesController {
     }
 
     @PutMapping(value = "/places/{id}", produces = DriveMediaType.APPLICATION_DRIVE_PLUS_JSON_VALUE)
-    public DriveResource<PlaceSummariesDriveResource> updatePlace(@PathVariable UUID id, @RequestBody Place place) {
+    public DriveDataResource updatePlace(@PathVariable UUID id, @RequestBody Place place) {
         log.info("Updating place {} with {}", id, place);
         placesService.update(id, place);
         PlaceSummaries placeSummaries = placesService.getPlacesVisited();
@@ -50,7 +49,7 @@ public class PlaceSummariesController {
     }
 
     @DeleteMapping(value = "/places/{id}", produces = DriveMediaType.APPLICATION_DRIVE_PLUS_JSON_VALUE)
-    public DriveResource<PlaceSummariesDriveResource> deletePlaceById(@PathVariable UUID id) {
+    public DriveDataResource deletePlaceById(@PathVariable UUID id) {
         placesService.deletePlaceById(id);
         PlaceSummaries placeSummaries = placesService.getPlacesToVisit();
         return resourceGenerator.generateDriveResource(placeSummaries, false);

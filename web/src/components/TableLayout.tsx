@@ -30,7 +30,7 @@ const TableLayout = (props: {
     return (
         <div className="Component-table-layout">
             <label id={labelId} className="Component-table-layout-label">{schemaProp.title}</label>
-            <table>
+            <table className="Component-table">
                 <TableHeader key={id + '-header'} id={id + '-header'} headings={headings} includeActions={includeActions} />
                 <tbody>
                     {items.map((item, i) => (

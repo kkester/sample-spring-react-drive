@@ -11,14 +11,14 @@ const TableRow = (props: {
     const itemData: any = props.item.data ? props.item.data : props.item; 
     const id = 'row' + props.id;
     return (
-        <tr id={id} className="Component-table-row">
+        <tr className="Component-table-row-tr">
             {Object.keys(props.schemaProps).map((key: string) => (
-                <td>{'' + itemData[key] ? itemData[key] : ''}</td>
+                <td className="Component-table-row-td">{'' + itemData[key] ? itemData[key] : ''}</td>
             ))}
             {links &&
-                <td id={id} className="Component-cell-button">
-                    {Object.keys(links).map(linkName => (
-                        <TableCellButton id={id} link={links[linkName] as Link} clickHandler={props.clickHandler} />
+                <td className="Component-cell-button">
+                    {Object.keys(links).map((linkName,i) => (
+                        <TableCellButton key={id + i} id={id} link={links[linkName] as Link} clickHandler={props.clickHandler} />
                     ))}
                 </td>}
         </tr>

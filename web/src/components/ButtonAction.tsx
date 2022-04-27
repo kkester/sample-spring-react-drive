@@ -3,6 +3,7 @@ import { Link } from "../api/DriveApi";
 const ButtonAction = (props: {
     id: string | number;
     link: Link;
+    navBar?: boolean;
     clickHandler: (link: Link) => void;
 }) => {
     const toggleClickHandler = () => {
@@ -12,7 +13,10 @@ const ButtonAction = (props: {
     const buttonId: string = props.id.toString();
     return (
         <div id={buttonId} className="Component-button">
-            <button id={buttonId} type="button" className="Component-button-input" onClick={toggleClickHandler}>
+            <button id={buttonId} 
+                type="button" 
+                className={props.navBar? "Component-nav-button-input": "Component-button-input"} 
+                onClick={toggleClickHandler}>
                 {props.link.title ? props.link.title : ''}
             </button>
         </div>
