@@ -1,33 +1,24 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.6'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.6.6'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
 }
 
-group = 'io.pivotal'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+subprojects {
 
-repositories {
-	mavenCentral()
-}
+    group = 'io.pivotal'
+    version = '0.0.1-SNAPSHOT'
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'com.github.javafaker:javafaker:1.0.2'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'mysql:mysql-connector-java'
-	annotationProcessor 'org.projectlombok:lombok'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java'
 
-	// Json Schema v4 Generator
-	implementation 'com.kjetland:mbknor-jackson-jsonschema_2.12:1.0.39'
+    repositories {
+        mavenCentral()
+    }
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
+    compileJava {
+        sourceCompatibility = '11'
+    }
 
-tasks.named('test') {
-	useJUnitPlatform()
 }

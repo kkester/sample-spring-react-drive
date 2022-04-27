@@ -1,1 +1,6 @@
-rootProject.name = 'drive'
+rootProject.name = 'spring-react-drive'
+include 'drive'
+include 'league'
+include 'common'
+include 'places'
+
