@@ -1,5 +1,5 @@
 .gradle
-/build/
+**/build
 !gradle/wrapper/gradle-wrapper.jar
 
 ### STS ###
@@ -27,15 +27,12 @@
 /.nb-gradle/
 
 # dependencies
-/web/node_modules
+**/node_modules
 /web/.pnp
 /web/.pnp.js
 
 # testing
-/coverage
-
-# production
-/web/build
+**/coverage
 
 # misc
 /web/.env.local
