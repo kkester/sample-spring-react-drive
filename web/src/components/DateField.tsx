@@ -7,7 +7,7 @@ const DateField = (props: {
     dataChangeHandler: (name: string, value: any) => void;
 }) => {
     const [value, setValue] = useState<any>(props.attribute.value);
-    
+
     const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
         setValue(event.currentTarget.value);
         props.dataChangeHandler(props.attribute.name, event.currentTarget.value);
@@ -19,17 +19,19 @@ const DateField = (props: {
     const inputId = id + '-input';
     return (
         <div key={id} id={id} className="Component-date">
-            <label key={labelId} id={labelId} className="Component-date-label">
-                {props.attribute.schemaProperty.title}:
-            </label><br/>
-            <input type="date"
-                key={inputId} 
-                id={inputId} 
-                className={readOnly ? "Component-readonly-date-input" : "Component-date-input"}
-                value={value}
-                readOnly={readOnly}
-                onChange={handleChange}
-            />
+            <div key={id} id={id} className={props.attribute.hasError ? "Component-date-error" : "Component-date"}>
+                <label key={labelId} id={labelId} className="Component-date-label">
+                    {props.attribute.schemaProperty.title}:
+                </label><br />
+                <input type="date"
+                    key={inputId}
+                    id={inputId}
+                    className={readOnly ? "Component-readonly-date-input" : "Component-date-input"}
+                    value={value}
+                    readOnly={readOnly}
+                    onChange={handleChange}
+                />
+            </div>
         </div>
     );
 }

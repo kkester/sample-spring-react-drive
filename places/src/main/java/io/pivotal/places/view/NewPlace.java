@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -12,15 +13,15 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class NewPlace {
     @JsonSchemaTitle("City")
-    @NotNull
+    @NotEmpty(message = "City is required")
     private String city;
 
     @JsonSchemaTitle("State")
-    @NotNull
+    @NotNull(message = "State is required")
     private States state;
 
     @JsonSchemaTitle("Country")
-    @NotNull
+    @NotEmpty(message = "Country is required")
     private String country;
 
     @JsonSchemaTitle("Description")

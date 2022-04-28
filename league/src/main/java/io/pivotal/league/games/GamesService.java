@@ -58,11 +58,13 @@ public class GamesService {
         return gameViewConverter.convertToGame(gameEntity, plays);
     }
 
-    public List<GameSummary> getLatestResults() {
+    public LatestResultsSummaries getLatestResults() {
         Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, GAME_TIME_PROPERTY_NAME));
         Page<GameSummary> gamesPage = gameRepository.findAll(pageable)
                 .map(gameViewConverter::convertToGameSummary);
-        return gamesPage.getContent();
+        return LatestResultsSummaries.builder()
+                .games(gamesPage.getContent())
+                .build();
     }
 
     public String getTeamNameByTeamId(UUID teamId) {

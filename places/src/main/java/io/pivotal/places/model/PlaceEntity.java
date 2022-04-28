@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -22,13 +23,13 @@ public class PlaceEntity {
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-//    @NotNull
+    @NotNull
     private String city;
 
-//    @NotNull
+    @NotNull
     private States state;
 
-//    @NotNull
+    @NotNull
     private String country;
 
     private String description;

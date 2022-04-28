@@ -5,11 +5,13 @@ const TableHeader = (props: {
 }) => {
     const id = 'header' + props.id;
     return (
-        <tr>
-            {props.headings.map((heading, i) => (
-                <th key={id + i} className="Component-table-header"> {heading}</th>))}
-            {props.includeActions && <th className="Component-table-header" key={props.headings.length} />}
-        </tr>
+        <thead>
+            <tr>
+                {props.headings.map((heading, i) => (
+                    <th key={id + i} className="Component-table-header"> {heading}</th>))}
+                {props.includeActions && <th className="Component-table-header" key={props.headings.length} />}
+            </tr>
+        </thead>
     );
 }
 

@@ -1,0 +1,36 @@
+.Component-date {
+    padding: 1%;
+}
+
+.Component-date-error {
+    padding: 5px;
+    border: 1px solid red;
+    border-radius: 10px;
+}
+
+.Component-date-label {
+    line-height: 2;
+    font-size: 1rem;
+    text-align: left;
+    color: #d2d0d0ec;
+}
+
+.Component-date-input {
+    text-indent: 5px;
+    border-radius: 10px;
+    line-height: 2;
+    font-size: 1rem;
+    background-color: #d2d0d0ec;
+    box-shadow: inset 2px 2px 3px rgba(255, 255, 255, .6),
+    inset -2px -2px 3px rgba(0, 0, 0, .6);
+}
+
+.Component-readonly-date-input {
+    text-indent: 5px;
+    border-radius: 10px;
+    line-height: 2;
+    font-size: 1rem;
+    background-color: #acaaaaec;
+    box-shadow: inset 2px 2px 3px rgba(255, 255, 255, .6),
+    inset -2px -2px 3px rgba(0, 0, 0, .6);
+}

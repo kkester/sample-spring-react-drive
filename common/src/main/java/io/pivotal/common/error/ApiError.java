@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ApiError {
-    private String code;
-    private String subcode;
+    private String subCode;
     private String description;
     private String localizedMessage;
 }

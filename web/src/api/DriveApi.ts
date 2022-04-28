@@ -57,6 +57,19 @@ export type DriveResource = {
     schema?: Schema,
 }
 
+export type ApiError = {
+    description: string;
+}
+
+export type ApiErrorSet = {
+    [error: string]: ApiError;
+}
+
+export type ApiErrors = {
+    code: string;
+    errors?: ApiErrorSet;
+}
+
 export const getResource = (uri: string): Promise<DriveResource> => {
     return axiosInstance()
         .get(uri)

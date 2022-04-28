@@ -1,5 +1,5 @@
 
-import { DriveResource, Link, Schema, SchemaProperty, SchemaPropertySet } from "../api/DriveApi";
+import { ApiErrors, ApiErrorSet, DriveResource, Link, Schema, SchemaProperty, SchemaPropertySet } from "../api/DriveApi";
 import { emptySchema, resolveSchema, ResourceAttribute } from "../api/ResourceDataApi";
 import { HttpMethod } from "../api/SampleDriveResources";
 import { ButtonGroupRow } from "./ButtonGroupRow";
@@ -17,17 +17,19 @@ const mapResourceAttribute = (
     key: string,
     schema: Schema,
     schemaProperty: SchemaProperty,
-    data: { [name: string]: any; }): ResourceAttribute => {
+    data: { [name: string]: any; },
+    attributeErrors: ApiErrorSet): ResourceAttribute => {
 
     const schemaPropertyWithTitle: SchemaProperty = schemaProperty.title ?
         schemaProperty : { ...schemaProperty, title: key };
-    const required: string[] = schema.required? schema.required : [];
- 
+    const required: string[] = schema.required ? schema.required : [];
+
     return {
         name: key,
         schema: schema,
         schemaProperty: schemaPropertyWithTitle,
         value: data[key],
+        hasError: attributeErrors[key] !== undefined,
         required: required.includes(key),
     }
 }
@@ -38,6 +40,7 @@ const mapFieldGroupRow = (
     schema: Schema,
     schemaProperty: SchemaProperty,
     data: { [name: string]: any; },
+    attributeErrors: ApiErrorSet,
     clickHandler: (link: Link) => void,
     dataChangeHandler: (name: string, value: any) => void): React.ReactNode => {
 
@@ -45,7 +48,7 @@ const mapFieldGroupRow = (
     const schemaProperties: SchemaPropertySet = propSchema.properties ? propSchema.properties : {};
 
     const attributes: ResourceAttribute[] = Object.keys(schemaProperties)
-        .map(key => mapResourceAttribute(key, schema, schemaProperties[key], data));
+        .map(key => mapResourceAttribute(key, schema, schemaProperties[key], data, attributeErrors));
 
     return <FieldGroupRow key={key + 'row-' + index}
         attributes={attributes}
@@ -57,6 +60,7 @@ const mapFieldGroupRow = (
 
 export const FormLayout = (props: {
     driveResource: DriveResource;
+    errors?: ApiErrors;
     clickHandler: (link: Link) => void;
     dataChangeHandler: (name: string, value: any) => void;
 }) => {
@@ -69,25 +73,26 @@ export const FormLayout = (props: {
     const data = props.driveResource.data ? props.driveResource.data : {};
     const schema: Schema = props.driveResource.schema ? props.driveResource.schema : emptySchema;
     const schemaProperties: SchemaPropertySet = schema.properties ? schema.properties : {};
+    const attributeErrors: ApiErrorSet = props.errors && props.errors.errors ? props.errors.errors : {};
 
     const attributes: ResourceAttribute[] = Object.keys(schemaProperties)
         .filter(key => !isObject(data[key]) && !isArray(data[key]))
-        .map(key => mapResourceAttribute(key, schema, schemaProperties[key], data));
+        .map(key => mapResourceAttribute(key, schema, schemaProperties[key], data, attributeErrors));
 
     const rows: React.ReactNode[] = Object.keys(schemaProperties)
         .filter(key => isObject(data[key]))
         .map((key, i) => mapFieldGroupRow(key, i, schema, schemaProperties[key], data[key],
-            props.clickHandler, props.dataChangeHandler));
+            attributeErrors, props.clickHandler, props.dataChangeHandler));
 
     const arrayAttributes: ResourceAttribute[] = Object.keys(schemaProperties)
         .filter(key => isArray(data[key]))
-        .map(key => mapResourceAttribute(key, schema, schemaProperties[key], data));
+        .map(key => mapResourceAttribute(key, schema, schemaProperties[key], data, {}));
 
     return (
         <div className="Compontent-form-layout">
             <ButtonGroupRow key={schema.id + 'navbar'}
                 clickHandler={props.clickHandler}
-                navBar = {true}
+                navBar={true}
                 links={navLinks} />
 
             {attributes.length > 0 &&

@@ -23,16 +23,18 @@ const TextField = (props: {
     const inputId = id + '-input';
     return (
         <div id={id} className="Component-text">
-            <label id={labelId} className="Component-text-label">
-                {schemaProperty.title}{required && ' *'}:
-            </label><br />
-            <input type="text" 
-                id={inputId} 
-                value={value}
-                readOnly={readOnly}
-                className={readOnly ? "Component-readonly-text-input" : "Component-text-input"}
-                onChange={handleChange}
-            />
+            <div id={id} className={props.attribute.hasError ? "Component-text-error" : "Component-text"}>
+                <label id={labelId} className="Component-text-label">
+                    {schemaProperty.title}{required && ' *'}:
+                </label><br />
+                <input type="text"
+                    id={inputId}
+                    value={value}
+                    readOnly={readOnly}
+                    className={readOnly ? "Component-readonly-text-input" : "Component-text-input"}
+                    onChange={handleChange}
+                />
+            </div>
         </div>
     );
 }

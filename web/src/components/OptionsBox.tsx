@@ -21,18 +21,20 @@ const OptionsBox = (props: {
     const labelId = id + '-label';
     const inputId = id + '-input';
     return (
-        <div id={id} className="Component-options">
-            <label id={labelId} className="Component-options-label">
-                {schemaProperty.title}{props.attribute.required && ' *'}:
-            </label><br />
-            <select id={inputId} className="Component-options-input" onChange={handleChange} value={value}>
-                <option value=""> -- Select --</option>
-                {options.map(option => (
-                    <option key={option} value={option}>
-                        {option}
-                    </option>
-                ))}
-            </select>
+        <div id={id} className="Component-options" >
+            <div id={id+'error'} className={props.attribute.hasError ? "Component-options-error" : "Component-options"} >
+                <label id={labelId} className="Component-options-label">
+                    {schemaProperty.title}{props.attribute.required && ' *'}:
+                </label><br />
+                <select id={inputId} className="Component-options-input" onChange={handleChange} value={value}>
+                    <option value=""> -- Select --</option>
+                    {options.map(option => (
+                        <option key={option} value={option}>
+                            {option}
+                        </option>
+                    ))}
+                </select>
+            </div>
         </div>
     );
 }

@@ -10,6 +10,7 @@ export type ResourceAttribute = {
     schema: Schema;
     schemaProperty: SchemaProperty;
     value: string | number | readonly string[] | undefined | object[];
+    hasError: boolean;
     required: boolean;
 }
 

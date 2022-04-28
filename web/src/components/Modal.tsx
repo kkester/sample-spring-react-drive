@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled from "styled-components";
 
 const ModalBackground = styled.div`
@@ -13,25 +12,32 @@ const ModalBackground = styled.div`
 `;
 
 const ModalBody = styled.div`
-    background-color: white;
+    border-radius: 20px;
+    border: 1.5px solid #d2d0d0ec;
+    background-color: #282c34;
     margin: 10% auto;
     padding: 20px;
-    width: 50%;
+    width: 60%;
 `;
 
 export const Modal = (props: {
+    shouldShow: boolean;
+    setShouldShow: (shouldShow: boolean) => void;
     children: any;
 }) => {
-    const [shouldShow, setShouldShow] = useState(false);
-
     return (
         <>
-            <button onClick={() => setShouldShow(true)}>Show Modal</button>
-            {shouldShow && (
+            {props.shouldShow && (
                 <ModalBackground>
                     <ModalBody>
-                        <button onClick={() => setShouldShow(false)}>Hide Modal</button>
-                        {props.children}
+                        <div>
+                            {props.children}
+                        </div>
+                        <div className="Component-button">
+                            <div className="Component-button-row">
+                                <button className={"Component-button-input"} onClick={() => props.setShouldShow(false)}>Close</button>
+                            </div>
+                        </div>
                     </ModalBody>
                 </ModalBackground>
             )}

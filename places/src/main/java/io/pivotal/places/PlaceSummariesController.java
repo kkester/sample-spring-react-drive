@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -33,7 +34,7 @@ public class PlaceSummariesController {
     }
 
     @PostMapping(value = "/places", produces = DriveMediaType.APPLICATION_DRIVE_PLUS_JSON_VALUE)
-    public DriveDataResource savePlace(@RequestBody NewPlace place) {
+    public DriveDataResource savePlace(@Valid @RequestBody NewPlace place) {
         log.info("Saving place {}", place);
         placesService.save(place);
         PlaceSummaries placeSummaries = placesService.getPlacesToVisit();
