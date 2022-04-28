@@ -32,10 +32,10 @@ public class TeamLinkConstants {
         );
     }
 
-    public static Map<String, DriveLink> teamLinks(UUID teamId) {
+    public static Map<String, DriveLink> teamLinks(UUID teamId, String teamName) {
         return DriveLink.of(
                 "home", HOME_LINK,
-                "team", TEAM_LINK.format(teamId)
+                "team", TEAM_LINK.format(teamName, teamId)
         );
     }
 

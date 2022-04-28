@@ -26,4 +26,6 @@ public class TeamSummary {
     private int pointsAgainst;
     @JsonSchemaTitle("Average Player Rating")
     private double averagePlayerRating;
+    @JsonSchemaTitle("Last 10 Games")
+    private String latestRecord;
 }

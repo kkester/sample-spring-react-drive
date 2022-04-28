@@ -1,5 +1,6 @@
 package io.pivotal.league.teams;
 
+import io.pivotal.league.PointsCalculater;
 import io.pivotal.league.games.GameViewConverter;
 import io.pivotal.league.games.view.GameSummary;
 import io.pivotal.league.model.GameEntity;
@@ -39,7 +40,7 @@ public class TeamViewConverter {
                         .wins(teamEntity.getWins())
                         .loses(teamEntity.getLosses())
                         .ties(teamEntity.getTies())
-                        .points((teamEntity.getWins() * 2) + teamEntity.getTies())
+                        .points(PointsCalculater.calculatePoints(teamEntity))
                         .total(teamEntity.getWins() + teamEntity.getLosses() + teamEntity.getTies())
                         .build())
                 .latestResults(latestGames.stream()
@@ -52,16 +53,45 @@ public class TeamViewConverter {
         UUID teamId = teamEntity.getId();
         int pointsFor = sumPointsFor(games, teamId);
         int pointsAgainst = sumPointsAgainst(games, teamId);
+        String latestRecord = calculateLatestResults(games, teamId);
 
         return TeamSummary.builder()
                 .id(teamEntity.getId())
                 .name(teamEntity.getName())
                 .gamesPlayed(teamEntity.getWins() + teamEntity.getLosses() + teamEntity.getTies())
-                .points((teamEntity.getWins() * 2) + teamEntity.getTies())
+                .points(PointsCalculater.calculatePoints(teamEntity))
                 .pointsFor(pointsFor)
                 .pointsAgainst(pointsAgainst)
                 .averagePlayerRating(avgRating)
+                .latestRecord(latestRecord)
                 .build();
+    }
+
+    private String calculateLatestResults(List<GameEntity> games, UUID teamId) {
+        int wins = 0;
+        int losses = 0;
+        int ties = 0;
+        for (GameEntity gameEntity : games) {
+            if (gameEntity.getHomeTeamPoints() == gameEntity.getVisitingTeamPoints()) {
+                ties = ties  + 1;
+            } else if (gameEntity.getHomeTeam().getId().equals(teamId)) {
+                if (gameEntity.getHomeTeamPoints() > gameEntity.getVisitingTeamPoints()) {
+                    wins = wins + 1;
+                } else {
+                    losses = losses + 1;
+                }
+            } else {
+                if (gameEntity.getHomeTeamPoints() > gameEntity.getVisitingTeamPoints()) {
+                    losses = losses + 1;
+                } else {
+                    wins = wins + 1;
+                }
+            }
+            if (wins + losses + ties >= 10) {
+                break;
+            }
+        }
+        return "" + wins + "-" + losses + "-" + ties;
     }
 
     private int sumPointsAgainst(List<GameEntity> games, UUID teamId) {

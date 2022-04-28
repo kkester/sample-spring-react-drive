@@ -42,19 +42,23 @@ public class PlayersService {
     }
 
     public TeamPlayerStatsSummaries getPlayersForTeam(UUID teamId) {
-        List<TeamPlayerStatsSummary> players = playerRepository.findAllByTeamId(teamId, POINTS_SORT).stream()
+        List<PlayerEntity> playerEntities = playerRepository.findAllByTeamId(teamId, POINTS_SORT);
+        List<TeamPlayerStatsSummary> players = playerEntities.stream()
                 .map(playerViewConverter::convertToTeamPlayerStatsSummary)
                 .collect(Collectors.toList());
         return TeamPlayerStatsSummaries.builder()
+                .teamName(playerEntities.get(0).getTeam().getName())
                 .players(players)
                 .build();
     }
 
     public PlayerSummaries getRosterForTeam(UUID teamId) {
-        List<PlayerSummary> players = playerRepository.findAllByTeamId(teamId, POINTS_SORT).stream()
+        List<PlayerEntity> playerEntities = playerRepository.findAllByTeamId(teamId, POINTS_SORT);
+        List<PlayerSummary> players = playerEntities.stream()
                 .map(playerViewConverter::convertToPlayerSummary)
                 .collect(Collectors.toList());
         return PlayerSummaries.builder()
+                .teamName(playerEntities.get(0).getTeam().getName())
                 .players(players)
                 .build();
     }

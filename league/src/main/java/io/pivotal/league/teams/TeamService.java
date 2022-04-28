@@ -54,7 +54,7 @@ public class TeamService {
 
     private TeamSummary convertToTeamSummary(TeamEntity teamEntity) {
         UUID teamId = teamEntity.getId();
-        List<GameEntity> games = gameRepository.findAllByHomeTeamIdOrVisitingTeamId(teamId, teamId, Sort.unsorted());
+        List<GameEntity> games = gameRepository.findAllByHomeTeamIdOrVisitingTeamId(teamId, teamId, Sort.by(Sort.Direction.DESC, GAME_TIME_PROPERTY_NAME));
         double avgRating = playersService.getAveragePlayerRating(teamId);
         return teamViewConverter.convertToTeamSummary(teamEntity, games, avgRating);
     }

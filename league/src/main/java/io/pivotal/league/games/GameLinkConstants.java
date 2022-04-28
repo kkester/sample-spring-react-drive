@@ -45,10 +45,10 @@ public class GameLinkConstants {
         return DriveLink.of("home", HOME_LINK, "games", GAMES_LINK);
     }
 
-    static Map<String, DriveLink> teamGameLinks(UUID teamId) {
+    static Map<String, DriveLink> teamGameLinks(UUID teamId, String teamName) {
         return DriveLink.of(
                 "home", HOME_LINK,
-                "team", TEAM_LINK.format(teamId),
+                "team", TEAM_LINK.format(teamName, teamId),
                 "games", TEAM_GAMES_LINK.format(teamId)
         );
     }

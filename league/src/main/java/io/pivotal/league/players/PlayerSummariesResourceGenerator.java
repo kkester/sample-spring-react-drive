@@ -31,14 +31,14 @@ public class PlayerSummariesResourceGenerator {
     }
 
     public DriveDataResource generateTeamPlayersResource(UUID teamId, TeamPlayerStatsSummaries playerStatsSummaries) {
-        Map<String, DriveLink> links = teamLinks(teamId);
+        Map<String, DriveLink> links = teamLinks(teamId, playerStatsSummaries.getTeamName());
         List<DriveResource<TeamPlayerStatsSummary>> resources = driveResourceGenerator.createDriveResourceList(
                 playerStatsSummaries.getPlayers(), player -> playerViewLink(player.getId()));
         return driveResourceGenerator.createDriveDataResource(links, Map.of(PLAYERS_KEY, resources), TeamPlayerStatsSummaries.class);
     }
 
     public DriveDataResource generateTeamRosterResource(UUID teamId, PlayerSummaries playerSummaries) {
-        Map<String, DriveLink> links = teamLinks(teamId);
+        Map<String, DriveLink> links = teamLinks(teamId, playerSummaries.getTeamName());
         List<DriveResource<PlayerSummary>> resources = driveResourceGenerator.createDriveResourceList(
                 playerSummaries.getPlayers(), player -> playerViewLink(player.getId()));
         return driveResourceGenerator.createDriveDataResource(links, Map.of(PLAYERS_KEY, resources), PlayerSummaries.class);

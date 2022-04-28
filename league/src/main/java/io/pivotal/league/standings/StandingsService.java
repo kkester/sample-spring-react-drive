@@ -1,5 +1,6 @@
 package io.pivotal.league.standings;
 
+import io.pivotal.league.PointsCalculater;
 import io.pivotal.league.model.TeamEntity;
 import io.pivotal.league.repositories.TeamRepository;
 import io.pivotal.league.standings.view.Standings;
@@ -26,15 +27,15 @@ public class StandingsService {
         return Standings.builder().teams(teams).build();
     }
 
-    private TeamStanding createTeamStanding(TeamEntity team) {
+    private TeamStanding createTeamStanding(TeamEntity teamEntity) {
         return TeamStanding.builder()
-                .teamId(team.getId())
-                .teamName(team.getName())
-                .wins(team.getWins())
-                .loses(team.getLosses())
-                .ties(team.getTies())
-                .points((team.getWins() * 2) + team.getTies())
-                .total(team.getWins() + team.getLosses() + team.getTies())
+                .teamId(teamEntity.getId())
+                .teamName(teamEntity.getName())
+                .wins(teamEntity.getWins())
+                .loses(teamEntity.getLosses())
+                .ties(teamEntity.getTies())
+                .points(PointsCalculater.calculatePoints(teamEntity))
+                .total(teamEntity.getWins() + teamEntity.getLosses() + teamEntity.getTies())
                 .build();
     }
 

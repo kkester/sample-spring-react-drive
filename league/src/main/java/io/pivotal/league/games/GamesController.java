@@ -41,7 +41,9 @@ public class GamesController {
 
     @GetMapping("/teams/{teamId}/games/{gameId}")
     public DriveResource<Game> getTeamGameById(@PathVariable UUID teamId, @PathVariable UUID gameId) {
-        return resourceGenerator.createDriveResource(teamGameLinks(teamId), gamesService.getGameById(gameId));
+        Game game = gamesService.getGameById(gameId);
+        String teamName = gamesService.getTeamNameByTeamId(teamId);
+        return resourceGenerator.createDriveResource(teamGameLinks(teamId, teamName), game);
     }
 
     @GetMapping("/games")

@@ -44,7 +44,7 @@ public class PlayersController {
     @SneakyThrows
     public DriveResource<Player> getPlayerById(@PathVariable UUID playerId) {
         Player player = playersService.getPlayerById(playerId);
-        return resourceGenerator.createDriveResource(PlayerLinkConstants.playerLinks(player.getTeamId()), player);
+        return resourceGenerator.createDriveResource(PlayerLinkConstants.playerLinks(player.getTeamId(), player.getTeamName()), player);
     }
 
 }

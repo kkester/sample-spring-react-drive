@@ -9,6 +9,7 @@ import io.pivotal.league.repositories.PlayerRepository;
 import io.pivotal.league.repositories.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,7 @@ public class LeagueInitializer {
     private final PlayerRepository playerRepository;
     private final GameRepository gameRepository;
     private final PlayRepository playRepository;
+    private final Faker faker;
 
     @EventListener
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -42,11 +44,11 @@ public class LeagueInitializer {
     }
 
     private List<TeamEntity> initializeTeams() {
-        Faker faker = new Faker();
         List<TeamEntity> teams = new ArrayList<>();
+        List<String> teamNames = new ArrayList<>();
         IntStream.range(0, 10).forEach(i -> {
             TeamEntity team = TeamEntity.builder()
-                    .name(faker.team().name())
+                    .name(createUniqueTeamName(teamNames))
                     .city(faker.address().city())
                     .build();
             teamRepository.save(team);
@@ -55,8 +57,19 @@ public class LeagueInitializer {
         return teams;
     }
 
+    private String createUniqueTeamName(List<String> teamNames) {
+        String teamName = faker.team().name();
+        String[] teamNameSplit = teamName.split(" ");
+        String mascotLowercase = teamNameSplit[teamNameSplit.length - 1];
+        String mascot = StringUtils.capitalize(mascotLowercase);
+        if (teamName.contains(mascot)) {
+            return createUniqueTeamName(teamNames);
+        }
+        teamNames.add(mascot);
+        return teamName.replace(mascotLowercase, mascot);
+    }
+
     private void initializePlayers(TeamEntity team) {
-        Faker faker = new Faker();
         IntStream.range(0, 10).forEach(i -> {
             Date birthday = faker.date().birthday(17, 47);
             Integer rating = faker.random().nextInt(3, 7);

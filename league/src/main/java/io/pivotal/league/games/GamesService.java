@@ -64,4 +64,10 @@ public class GamesService {
                 .map(gameViewConverter::convertToGameSummary);
         return gamesPage.getContent();
     }
+
+    public String getTeamNameByTeamId(UUID teamId) {
+        return teamRepository.findById(teamId)
+                .map(TeamEntity::getName)
+                .orElseThrow(() -> ApplicationException.resourceNotFound("Team Not Found"));
+    }
 }

@@ -30,11 +30,8 @@ public class GameSummariesResourceGenerator {
     public DriveDataResource generateTeamGameSummariesResource(UUID teamId, TeamGameSummaries gameSummaries) {
         List<DriveResource<TeamGameSummary>> resources = driveResourceGenerator.createDriveResourceList(
                 gameSummaries.getGames(), game -> teamGameViewLink(teamId, game.getId()));
-        Map<String, Object> data = Map.of(
-                "teamName", gameSummaries.getTeamName(),
-                GAMES_KEY, resources
-        );
-        return driveResourceGenerator.createDriveDataResource(teamLinks(teamId), data, TeamGameSummaries.class);
+        Map<String, Object> data = Map.of(GAMES_KEY, resources);
+        return driveResourceGenerator.createDriveDataResource(teamLinks(teamId, gameSummaries.getTeamName()), data, TeamGameSummaries.class);
     }
 
     public DriveDataResource generateDriveResource(GameSummaries gameSummaries) {
