@@ -51,20 +51,17 @@ public class GamesService {
                 .build();
     }
 
-    public Game getGameById(UUID gameId) {
+    public GameDetails getGameById(UUID gameId) {
         GameEntity gameEntity = gameRepository.findById(gameId)
                 .orElseThrow(() -> ApplicationException.resourceNotFound("Game Not Found"));
         List<PlayEntity> plays = playRepository.findAllByGameId(gameId);
-        return gameViewConverter.convertToGame(gameEntity, plays);
+        return gameViewConverter.convertToGameDetails(gameEntity, plays);
     }
 
-    public LatestResultsSummaries getLatestResults() {
+    public GamesPage getLatestResults() {
         Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, GAME_TIME_PROPERTY_NAME));
-        Page<GameSummary> gamesPage = gameRepository.findAll(pageable)
-                .map(gameViewConverter::convertToGameSummary);
-        return LatestResultsSummaries.builder()
-                .games(gamesPage.getContent())
-                .build();
+        Page<GameEntity> gamesPage = gameRepository.findAll(pageable);
+        return gameViewConverter.convertToGamesPage(gamesPage.getContent());
     }
 
     public String getTeamNameByTeamId(UUID teamId) {

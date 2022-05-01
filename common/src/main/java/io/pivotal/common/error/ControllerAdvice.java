@@ -2,9 +2,12 @@ package io.pivotal.common.error;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -41,5 +44,16 @@ public class ControllerAdvice {
                 .code("invalid-request")
                 .errors(errors)
                 .build();
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    ResponseEntity<ApiErrors> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
+        String[] supportedMethods = exception.getSupportedMethods();
+        ApiErrors apiErrors = ApiErrors.builder()
+                .code("method-not-allowed")
+                .build();
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+                .header(HttpHeaders.ALLOW, supportedMethods)
+                .body(apiErrors);
     }
 }

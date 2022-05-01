@@ -10,10 +10,12 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-@JsonSchemaInject(bools = {@JsonSchemaBool(path = "readOnly", value = true)})
 public class Teams {
     @JsonSchemaTitle("Home")
+    @JsonSchemaInject(bools = {@JsonSchemaBool(path = "readOnly", value = true)})
     private String home;
+
     @JsonSchemaTitle("Visitor")
+    @JsonSchemaInject(bools = {@JsonSchemaBool(path = "readOnly", value = true)})
     private String visitor;
 }

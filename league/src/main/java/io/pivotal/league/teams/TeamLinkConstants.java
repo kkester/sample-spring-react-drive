@@ -28,14 +28,14 @@ public class TeamLinkConstants {
 
     public static Map<String, DriveLink> teamViewLink(UUID id) {
         return DriveLink.of(
-                "team", TEAM_LINK.format("view", id)
+                "team", TEAM_LINK.applyTitleAndVariables("view", id)
         );
     }
 
     public static Map<String, DriveLink> teamLinks(UUID teamId, String teamName) {
         return DriveLink.of(
                 "home", HOME_LINK,
-                "team", TEAM_LINK.format(teamName, teamId)
+                "team", TEAM_LINK.applyTitleAndVariables(teamName, teamId)
         );
     }
 
@@ -43,9 +43,9 @@ public class TeamLinkConstants {
         return DriveLink.of(
                 "home", HOME_LINK,
                 "standings", STANDINGS_LINK,
-                "games", TEAM_GAMES_LINK.format(teamId),
-                "roster", TEAM_ROSTER_LINK.format(teamId),
-                "stats", TEAM_PLAYERS_LINK.format(teamId)
+                "games", TEAM_GAMES_LINK.applyVariables(teamId),
+                "roster", TEAM_ROSTER_LINK.applyVariables(teamId),
+                "stats", TEAM_PLAYERS_LINK.applyVariables(teamId)
         );
     }
 

@@ -10,9 +10,13 @@
 
 .Component-text-label {
     line-height: 2;
-    font-size: 1rem;
+    font-size: 1.2rem;
     text-align: left;
     color: #d2d0d0ec;
+}
+
+.Component-text-input-view {
+    font-size: 1rem;
 }
 
 .Component-text-input {

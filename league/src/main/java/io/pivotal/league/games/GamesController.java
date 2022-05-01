@@ -1,6 +1,6 @@
 package io.pivotal.league.games;
 
-import io.pivotal.league.games.view.Game;
+import io.pivotal.league.games.view.GameDetails;
 import io.pivotal.league.games.view.GameSummaries;
 import io.pivotal.league.games.view.TeamGameSummaries;
 import io.pivotal.drive.mediatype.DriveDataResource;
@@ -35,15 +35,15 @@ public class GamesController {
 
     @GetMapping("/games/{gameId}")
     @SneakyThrows
-    public DriveResource<Game> getGameById(@PathVariable UUID gameId) {
+    public DriveResource<GameDetails> getGameById(@PathVariable UUID gameId) {
         return resourceGenerator.createDriveResource(gameLinks(), gamesService.getGameById(gameId));
     }
 
     @GetMapping("/teams/{teamId}/games/{gameId}")
-    public DriveResource<Game> getTeamGameById(@PathVariable UUID teamId, @PathVariable UUID gameId) {
-        Game game = gamesService.getGameById(gameId);
+    public DriveResource<GameDetails> getTeamGameById(@PathVariable UUID teamId, @PathVariable UUID gameId) {
+        GameDetails gameDetails = gamesService.getGameById(gameId);
         String teamName = gamesService.getTeamNameByTeamId(teamId);
-        return resourceGenerator.createDriveResource(teamGameLinks(teamId, teamName), game);
+        return resourceGenerator.createDriveResource(teamGameLinks(teamId, teamName), gameDetails);
     }
 
     @GetMapping("/games")

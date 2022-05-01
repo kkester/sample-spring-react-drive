@@ -2,6 +2,7 @@ import './Main.css';
 import './MainTextField.css';
 import './MainOptionsBox.css';
 import './MainDateField.css';
+import './MainFieldGroupRow.css';
 
 import { ApiErrors, deleteResource, DriveResource, getResource, Link, saveResource, updateResource } from "../api/DriveApi";
 import { useEffect, useState } from 'react';
@@ -15,7 +16,7 @@ export const Main = () => {
     const [shouldShowModal, setShouldShowModal] = useState<boolean>(false);
 
     useEffect(() => {
-        getResource("/places")
+        getResource("/league")
             .then(response => { setDriveResource(response) });
     }, [])
 

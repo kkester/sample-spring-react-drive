@@ -31,13 +31,13 @@ public class GameLinkConstants {
 
     static Map<String, DriveLink> gameViewLink(UUID gameId) {
         return DriveLink.of(
-                "game", GAME_LINK.format("view", gameId)
+                "game", GAME_LINK.applyTitleAndVariables("view", gameId)
         );
     }
 
     static Map<String, DriveLink> teamGameViewLink(UUID teamId, UUID gameId) {
         return DriveLink.of(
-                "game", TEAM_GAME_LINK.format("view", teamId, gameId)
+                "game", TEAM_GAME_LINK.applyTitleAndVariables("view", teamId, gameId)
         );
     }
 
@@ -48,8 +48,8 @@ public class GameLinkConstants {
     static Map<String, DriveLink> teamGameLinks(UUID teamId, String teamName) {
         return DriveLink.of(
                 "home", HOME_LINK,
-                "team", TEAM_LINK.format(teamName, teamId),
-                "games", TEAM_GAMES_LINK.format(teamId)
+                "team", TEAM_LINK.applyTitleAndVariables(teamName, teamId),
+                "games", TEAM_GAMES_LINK.applyVariables(teamId)
         );
     }
 

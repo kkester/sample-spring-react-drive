@@ -16,6 +16,7 @@ const OptionsBox = (props: {
 
     const schemaProperty: SchemaProperty = props.attribute.schemaProperty;
     const options: string[] = schemaProperty.enum ? schemaProperty.enum : [];
+    const title: string = schemaProperty.title ? schemaProperty.title : props.attribute.name;
 
     const id = props.attribute.name + props.id;
     const labelId = id + '-label';
@@ -24,7 +25,7 @@ const OptionsBox = (props: {
         <div id={id} className="Component-options" >
             <div id={id+'error'} className={props.attribute.hasError ? "Component-options-error" : "Component-options"} >
                 <label id={labelId} className="Component-options-label">
-                    {schemaProperty.title}{props.attribute.required && ' *'}:
+                    {title}{props.attribute.required && ' *'}:
                 </label><br />
                 <select id={inputId} className="Component-options-input" onChange={handleChange} value={value}>
                     <option value=""> -- Select --</option>

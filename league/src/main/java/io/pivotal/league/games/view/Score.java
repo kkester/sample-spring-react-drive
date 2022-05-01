@@ -10,10 +10,12 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-@JsonSchemaInject(bools = {@JsonSchemaBool(path = "readOnly", value = true)})
 public class Score {
     @JsonSchemaTitle("Score")
+    @JsonSchemaInject(bools = {@JsonSchemaBool(path = "readOnly", value = true)})
     private int homePoints;
+
     @JsonSchemaTitle("Score")
+    @JsonSchemaInject(bools = {@JsonSchemaBool(path = "readOnly", value = true)})
     private int visitorPoints;
 }

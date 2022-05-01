@@ -3,6 +3,9 @@ package io.pivotal.places.view;
 public enum States {
     MA,
     MN,
+    ME,
     NC,
-    TX
+    NJ,
+    TX,
+    WA
 }

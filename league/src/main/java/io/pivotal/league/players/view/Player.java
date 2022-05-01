@@ -14,14 +14,19 @@ import java.util.UUID;
 @Getter
 @Builder
 @ToString
-@JsonSchemaInject(bools = {@JsonSchemaBool(path = "readOnly", value = true)})
 public class Player {
     @JsonIgnore
     private UUID teamId;
+
     @JsonSchemaTitle("Team Name")
+    @JsonSchemaInject(bools = {@JsonSchemaBool(path = "readOnly", value = true)})
     private String teamName;
+
     private PlayerInfo info;
+
+    @JsonSchemaTitle("Stats")
     private PlayerStats stats;
+
     @JsonSchemaTitle("Games")
     private List<PlayerGameStats> games;
 }

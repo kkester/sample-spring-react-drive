@@ -1,0 +1,28 @@
+.Compontent-field-row {
+    display: flex;
+    width: 98%;
+    margin: 0% 1%;
+    justify-content: left;
+}
+
+.Compontent-field-row-section {
+    width: 98%;
+    margin: 1% 1%;
+    background-color: #282c34;
+    border-radius: 10px;
+}
+
+.Compontent-field-section-row {
+    display: flex;
+    width: 100%;
+    justify-content: left;
+}
+
+.Compontent-field-section-label {
+    width: 98%;
+    margin: 0% 1%;
+    line-height: 2;
+    font-size: 1.5rem;
+    text-align: left;
+    color: #d2d0d0ec;
+}

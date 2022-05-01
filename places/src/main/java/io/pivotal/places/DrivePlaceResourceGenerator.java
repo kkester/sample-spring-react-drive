@@ -32,7 +32,7 @@ public class DrivePlaceResourceGenerator {
         Map<String, DriveLink> links = DriveLink.of(
                 NON_VISITED_LINK_NAME, PLACES_TO_VISIT_LINK,
                 VISITED_LINK_NAME, PLACES_VISITED_LINK,
-                SAVE_LINK_NAME, UPDATE_PLACE_LINK.format(place.getId())
+                SAVE_LINK_NAME, UPDATE_PLACE_LINK.applyVariables(place.getId())
         );
         return resourceGenerator.createDriveResource(links, place);
     }

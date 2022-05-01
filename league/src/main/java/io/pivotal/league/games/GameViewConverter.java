@@ -5,7 +5,9 @@ import io.pivotal.league.model.GameEntity;
 import io.pivotal.league.model.PlayEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -43,10 +45,10 @@ public class GameViewConverter {
                 .build();
     }
 
-    public Game convertToGame(GameEntity gameEntity, List<PlayEntity> plays) {
+    public GameDetails convertToGameDetails(GameEntity gameEntity, List<PlayEntity> plays) {
         UUID homeTeamId = gameEntity.getHomeTeam().getId();
         UUID visitorTeamId = gameEntity.getVisitingTeam().getId();
-        return Game.builder()
+        return GameDetails.builder()
                 .teams(Teams.builder()
                         .home(gameEntity.getHomeTeam().getName())
                         .visitor(gameEntity.getVisitingTeam().getName())
@@ -73,5 +75,34 @@ public class GameViewConverter {
                         "Shoots and scores with a rating of " + playEntity.getPlayerRating() + " on a chance of " + playEntity.getChance() :
                         "Shoots and misses with a rating of " + playEntity.getPlayerRating() + " on a chance of " + playEntity.getChance())
                 .build();
+    }
+
+    public Game convertToGame(GameEntity gameEntity) {
+        if (gameEntity == null) {
+            return null;
+        }
+        return Game.builder()
+                .home(GameTeam.builder()
+                        .team(gameEntity.getHomeTeam().getName())
+                        .score(gameEntity.getHomeTeamPoints())
+                        .build())
+                .visitor(GameTeam.builder()
+                        .team(gameEntity.getVisitingTeam().getName())
+                        .score(gameEntity.getVisitingTeamPoints())
+                        .build())
+                .build();
+    }
+
+    public GamesPage convertToGamesPage(List<GameEntity> gameEntities) {
+        Map<String,GameEntity> gameEntitiesMap = gameEntities.stream()
+                .collect(Collectors.toMap(value -> "game"+gameEntities.indexOf(value), value -> value));
+        LatestGames latestGames = LatestGames.builder()
+                .game1(convertToGame(gameEntitiesMap.get("game0")))
+                .game2(convertToGame(gameEntitiesMap.get("game1")))
+                .game3(convertToGame(gameEntitiesMap.get("game2")))
+                .game4(convertToGame(gameEntitiesMap.get("game3")))
+                .game5(convertToGame(gameEntitiesMap.get("game4")))
+                .build();
+        return GamesPage.builder().latestGames(Collections.singletonList(latestGames)).build();
     }
 }

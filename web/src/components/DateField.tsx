@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ResourceAttribute } from "../api/ResourceDataApi";
+import { SchemaProperty } from "../api/DriveApi";
+import { isReadOnly, isReadOnlyView, ResourceAttribute } from "../api/ResourceDataApi";
 
 const DateField = (props: {
     id: string | number;
@@ -14,23 +15,31 @@ const DateField = (props: {
     }
 
     const id = props.attribute.name + props.id;
-    const readOnly = props.attribute.schemaProperty.readOnly || props.attribute.schema.readOnly;
+    const schemaProperty: SchemaProperty = props.attribute.schemaProperty;
+    const readOnly: boolean = isReadOnly(props.attribute);
+    const readOnlyView: boolean = isReadOnlyView(props.attribute);
+    const title: string = schemaProperty.title ? schemaProperty.title : props.attribute.name;
+
     const labelId = id + '-label';
     const inputId = id + '-input';
     return (
         <div key={id} id={id} className="Component-date">
             <div key={id} id={id} className={props.attribute.hasError ? "Component-date-error" : "Component-date"}>
                 <label key={labelId} id={labelId} className="Component-date-label">
-                    {props.attribute.schemaProperty.title}:
+                    {title}:
                 </label><br />
-                <input type="date"
-                    key={inputId}
-                    id={inputId}
-                    className={readOnly ? "Component-readonly-date-input" : "Component-date-input"}
-                    value={value}
-                    readOnly={readOnly}
-                    onChange={handleChange}
-                />
+                {readOnlyView ?
+                    <label id={labelId} className="Component-text-input-view">
+                        {value}
+                    </label> :
+                    <input type="date"
+                        key={inputId}
+                        id={inputId}
+                        className={readOnly ? "Component-readonly-date-input" : "Component-date-input"}
+                        value={value}
+                        readOnly={readOnly}
+                        onChange={handleChange}
+                    />}
             </div>
         </div>
     );

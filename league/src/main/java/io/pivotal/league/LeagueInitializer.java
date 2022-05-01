@@ -62,7 +62,7 @@ public class LeagueInitializer {
         String[] teamNameSplit = teamName.split(" ");
         String mascotLowercase = teamNameSplit[teamNameSplit.length - 1];
         String mascot = StringUtils.capitalize(mascotLowercase);
-        if (teamName.contains(mascot)) {
+        if (teamNames.contains(mascot)) {
             return createUniqueTeamName(teamNames);
         }
         teamNames.add(mascot);

@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -71,22 +70,15 @@ public class DriveLink {
         return type == null ? null : type.toString();
     }
 
-    public DriveLink format(Object pathVariable) {
+    public DriveLink applyVariables(Object...pathVariables) {
         return toBuilder()
-                .href(String.format(this.href, pathVariable))
+                .href(String.format(this.href, pathVariables))
                 .build();
     }
 
-    public DriveLink format(String title, UUID pathVariable1) {
+    public DriveLink applyTitleAndVariables(String title, Object...pathVariables) {
         return toBuilder()
-                .href(String.format(this.href, pathVariable1))
-                .title(title)
-                .build();
-    }
-
-    public DriveLink format(String title, UUID pathVariable1, UUID pathVariable2) {
-        return toBuilder()
-                .href(String.format(this.href, pathVariable1, pathVariable2))
+                .href(String.format(this.href, pathVariables))
                 .title(title)
                 .build();
     }

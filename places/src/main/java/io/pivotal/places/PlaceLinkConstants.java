@@ -57,8 +57,8 @@ public class PlaceLinkConstants {
 
     public static Map<String, DriveLink> placeLinks(UUID placeId) {
         return DriveLink.of(
-                PLACE_LINK_NAME, VIEW_PLACE_LINK.format(placeId),
-                DELETE_LINK_NAME, DELETE_PLACE_LINK.format(placeId)
+                PLACE_LINK_NAME, VIEW_PLACE_LINK.applyVariables(placeId),
+                DELETE_LINK_NAME, DELETE_PLACE_LINK.applyVariables(placeId)
         );
     }
 
