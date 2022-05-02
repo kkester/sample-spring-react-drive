@@ -14,7 +14,7 @@ public class PlayerViewConverter {
     public TeamPlayerStatsSummary convertToTeamPlayerStatsSummary(PlayerEntity playerEntity) {
         return TeamPlayerStatsSummary.builder()
                 .id(playerEntity.getId())
-                .name(playerEntity.getName())
+                .player(playerEntity.getName())
                 .points(playerEntity.getPoints())
                 .rating(playerEntity.getRating())
                 .highestRating(playerEntity.getHighestRating())
@@ -25,7 +25,7 @@ public class PlayerViewConverter {
     public PlayerStatsSummary convertToPlayerStatsSummary(PlayerEntity playerEntity, Integer gamesPlayed) {
         return PlayerStatsSummary.builder()
                 .id(playerEntity.getId())
-                .name(playerEntity.getName())
+                .player(playerEntity.getName())
                 .teamName(playerEntity.getTeam().getName())
                 .gamesPlayed(gamesPlayed)
                 .points(playerEntity.getPoints())
@@ -36,7 +36,7 @@ public class PlayerViewConverter {
     public PlayerSummary convertToPlayerSummary(PlayerEntity playerEntity) {
         return PlayerSummary.builder()
                 .id(playerEntity.getId())
-                .name(playerEntity.getName())
+                .player(playerEntity.getName())
                 .homeTown(playerEntity.getHomeTown())
                 .homeState(playerEntity.getHomeState())
                 .birthDate(playerEntity.getBirthDate())

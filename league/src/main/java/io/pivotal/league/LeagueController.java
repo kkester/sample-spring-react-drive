@@ -1,24 +1,26 @@
 package io.pivotal.league;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
-import io.pivotal.league.games.GamesService;
-import io.pivotal.league.games.view.GameSummaries;
-import io.pivotal.league.games.view.GamesPage;
-import io.pivotal.league.players.PlayersService;
-import io.pivotal.league.standings.StandingsService;
+import io.pivotal.drive.mediatype.DriveDataResource;
 import io.pivotal.drive.mediatype.DriveResource;
 import io.pivotal.drive.mediatype.DriveResourceGenerator;
+import io.pivotal.league.games.GamesService;
+import io.pivotal.league.games.view.GamesPage;
+import io.pivotal.league.players.PlayersService;
+import io.pivotal.league.players.view.PlayerStatsSummary;
+import io.pivotal.league.standings.StandingsService;
+import io.pivotal.league.standings.view.TeamStanding;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static io.pivotal.league.LeagueLinkConstants.MAIN_LINKS;
+import static io.pivotal.league.players.PlayerLinkConstants.playerViewLink;
+import static io.pivotal.league.teams.TeamLinkConstants.teamViewLink;
 
 @RestController
 @CrossOrigin("*")
@@ -32,13 +34,21 @@ public class LeagueController {
 
     @GetMapping("/league")
     @SneakyThrows
-    public DriveResource<League> getLeague() {
+    public DriveDataResource getLeague() {
         GamesPage latestResults = gamesService.getLatestResults();
         League league = League.builder()
                 .topTeams(standingsService.getTopTeams())
                 .topPlayers(playersService.getTopPlayers())
                 .latestResults(latestResults)
                 .build();
-        return resourceGenerator.createDriveResource(MAIN_LINKS, league);
+
+        Map<String,Object> data = resourceGenerator.createData(league);
+        List<DriveResource<TeamStanding>> topTeams = resourceGenerator.createDriveResourceList(
+                league.getTopTeams(), teamStanding -> teamViewLink(teamStanding.getTeamId(), teamStanding.getTeam()));
+        List<DriveResource<PlayerStatsSummary>> topPlayers = resourceGenerator.createDriveResourceList(
+                league.getTopPlayers(), player -> playerViewLink(player.getId(), player.getPlayer()));
+        data.put("topTeams", topTeams);
+        data.put("topPlayers", topPlayers);
+        return resourceGenerator.createDriveDataResource(MAIN_LINKS, data, League.class);
     }
 }

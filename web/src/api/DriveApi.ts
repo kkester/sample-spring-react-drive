@@ -37,7 +37,6 @@ export type SchemaSet = {
 }
 
 export type Schema = {
-    id?: string;
     title?: string;
     type: string;
     $ref?: string;

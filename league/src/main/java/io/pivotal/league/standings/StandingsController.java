@@ -30,7 +30,7 @@ public class StandingsController {
     public DriveDataResource getStandings() {
         Standings standings = standingsService.getStandings();
         List<DriveResource<TeamStanding>> resources = resourceGenerator.createDriveResourceList(
-                standings.getTeams(), team -> teamViewLink(team.getTeamId()));
+                standings.getTeams(), teamStanding -> teamViewLink(teamStanding.getTeamId(), teamStanding.getTeam()));
         return resourceGenerator.createDriveDataResource(MAIN_LINKS, Map.of("teams", resources), Standings.class);
     }
 }

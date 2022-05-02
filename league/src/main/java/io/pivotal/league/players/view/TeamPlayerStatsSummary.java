@@ -15,7 +15,7 @@ public class TeamPlayerStatsSummary {
     @JsonIgnore
     private UUID id;
     @JsonSchemaTitle("Player Name")
-    private String name;
+    private String player;
     @JsonSchemaTitle("Points")
     private Integer points;
     @JsonSchemaTitle("Rating")

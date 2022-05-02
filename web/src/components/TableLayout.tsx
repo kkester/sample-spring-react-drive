@@ -3,6 +3,41 @@ import { resolveSchema, ResourceAttribute } from "../api/ResourceDataApi";
 import { TableHeader } from "./TableHeader";
 import { TableRow } from "./TableRow";
 
+export type RowItemCell = {
+    name: string;
+    data: any;
+    link?: Link;
+}
+
+export type RowItem = {
+    links: Link[];
+    cells: Map<String,RowItemCell>;
+}
+
+const extractRowCell = (key: string, data: any, links: any): RowItemCell => {
+    return {
+        name: key,
+        data: data,
+        link: links[key]
+    };
+}
+
+const extractRowItem = (item: any): RowItem => {
+    const itemData: any = item.data ? item.data : item;
+    const links: any = item.links ? item.links : {};
+    const cells: Map<String,RowItemCell> = new Map();
+    Object.keys(itemData).forEach(key => {
+        cells.set(key, extractRowCell(key, itemData[key], links));
+    });
+    const actionColumnLinks: Link[] = links && Object.keys(links)
+        .filter((linkName) => (itemData[linkName] === undefined))
+        .map(linkName => links[linkName]);
+    return {
+        links: actionColumnLinks,
+        cells: cells
+    };
+}
+
 const extractTitle = (
     key: string,
     schemaProps: SchemaPropertySet): string => {
@@ -24,16 +59,16 @@ const TableLayout = (props: {
         .filter(title => title !== '' );
 
     const items: object[] = props.attribute.value as object[];
-    const includeActions: boolean = items.filter(item => Object.keys(item).includes('links')).length > 0;
+    const rowItems: RowItem[] = items.map(item => extractRowItem(item));
+    const includeActions: boolean = rowItems && rowItems.filter(rowItem => rowItem.links.length > 0).length > 0;
 
     const id = props.attribute.name + props.id;
     const labelId = id + '-label';
 
-    const rows: React.ReactNode[] = items && items.map((item, i) => (
+    const rows: React.ReactNode[] = rowItems && rowItems.map((rowItem, i) => (
         <TableRow key={id + '-row-' + i}
             id={id + '-row-' + i}
-            item={item}
-            itemsSchema={itemsSchema}
+            item={rowItem}
             schemaProps={schemaProps}
             attribute={props.attribute}
             clickHandler={props.clickHandler}

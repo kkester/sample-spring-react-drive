@@ -38,8 +38,10 @@ public class GameViewConverter {
         return GameSummary.builder()
                 .id(gameEntity.getId())
                 .home(gameEntity.getHomeTeam().getName())
+                .homeTeamId(gameEntity.getHomeTeam().getId())
                 .homePoints(gameEntity.getHomeTeamPoints())
                 .visitor(gameEntity.getVisitingTeam().getName())
+                .visitorTeamId(gameEntity.getVisitingTeam().getId())
                 .visitorPoints(gameEntity.getVisitingTeamPoints())
                 .gameTime(gameEntity.getGameTime())
                 .build();

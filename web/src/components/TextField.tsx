@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Schema, SchemaProperty } from "../api/DriveApi";
+import { SchemaProperty } from "../api/DriveApi";
 import { isReadOnly, isReadOnlyView, ResourceAttribute } from "../api/ResourceDataApi";
 
 const TextField = (props: {

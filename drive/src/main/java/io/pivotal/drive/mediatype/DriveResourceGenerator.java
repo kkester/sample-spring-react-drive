@@ -1,5 +1,7 @@
 package io.pivotal.drive.mediatype;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kjetland.jackson.jsonSchema.JsonSchemaGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -42,5 +44,9 @@ public class DriveResourceGenerator {
                 .data(data)
                 .schema(schemaGenerator.generateJsonSchema(dataType))
                 .build();
+    }
+
+    public Map<String,Object> createData(Object dataObject) {
+        return schemaGenerator.rootObjectMapper().convertValue(dataObject, new TypeReference<>() {});
     }
 }

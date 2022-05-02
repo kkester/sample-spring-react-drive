@@ -38,13 +38,13 @@ export const FormLayout = (props: {
 
     return (
         <div className="Compontent-form-layout">
-            <ButtonGroupRow key={schema.id + 'navbar'}
+            <ButtonGroupRow key={schema.title + 'navbar'}
                 clickHandler={props.clickHandler}
                 navBar={true}
                 links={navLinks} />
 
             {attributes.length > 0 &&
-                <FieldGroupRow key={schema.id + 'row-0'}
+                <FieldGroupRow key={schema.title + 'row-0'}
                     attributes={attributes}
                     clickHandler={props.clickHandler}
                     dataChangeHandler={props.dataChangeHandler} />}
@@ -52,12 +52,12 @@ export const FormLayout = (props: {
             {rows}
 
             {arrayAttributes.length > 0 &&
-                <FieldGroupRow key={schema.id + 'items-row'}
+                <FieldGroupRow key={schema.title + 'items-row'}
                     attributes={arrayAttributes}
                     clickHandler={props.clickHandler}
                     dataChangeHandler={props.dataChangeHandler} />}
 
-            <ButtonGroupRow key={schema.id + 'ops'}
+            <ButtonGroupRow key={schema.title + 'ops'}
                 clickHandler={props.clickHandler}
                 links={crudLinks} />
         </div>

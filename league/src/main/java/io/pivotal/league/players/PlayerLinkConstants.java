@@ -20,10 +20,10 @@ public class PlayerLinkConstants {
             .build();
     public static final DriveLink TEAM_PLAYERS_LINK = DriveLink.builder()
             .href("/teams/%s/players")
-            .title("Team Players")
+            .title("Players")
             .build();
 
-    static Map<String, DriveLink> playerLinks(UUID teamId, String teamName) {
+    public static Map<String, DriveLink> playerLinks(UUID teamId, String teamName) {
         return DriveLink.of(
                 "home", HOME_LINK,
                 "team", TEAM_LINK.applyTitleAndVariables(teamName, teamId),
@@ -32,8 +32,8 @@ public class PlayerLinkConstants {
         );
     }
 
-    static Map<String, DriveLink> playerViewLink(UUID id) {
-        return DriveLink.of("player", PLAYER_LINK.applyTitleAndVariables("view", id));
+    public static Map<String, DriveLink> playerViewLink(UUID id, String name) {
+        return DriveLink.of("player", PLAYER_LINK.applyTitleAndVariables(name, id));
     }
 
     private PlayerLinkConstants() {

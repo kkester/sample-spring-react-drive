@@ -34,7 +34,6 @@
     text-decoration: underline;
     text-underline-offset: 2px;
     text-shadow: 1px 0px rgb(28, 2, 161);
-    border-radius: 5px;
 }
 
 .Component-nav-button-input:hover {
@@ -77,31 +76,33 @@
     justify-content: space-around;
     border: 1.5px solid #4416e9;
     text-align: left;
-    padding: 8px;
+    padding: 10px;
 }
 
 .Component-cell-button-input {
     border: 0;
-    padding: 2px 20px;
+    line-height: 1.5;
     font-size: 1rem;
     text-align: center;
-    color: #d2d0d0ec;
-    text-shadow: 1px 1px 1px #000;
-    border-radius: 5px;
-    background-color: rgb(29, 0, 220);
-    background-image: linear-gradient(to top left,
-                                      rgba(0, 0, 0, .2),
-                                      rgba(0, 0, 0, .2) 30%,
-                                      rgba(0, 0, 0, 0));
-    box-shadow: inset 2px 2px 3px rgba(255, 255, 255, .6),
-                inset -2px -2px 3px rgba(0, 0, 0, .6);
+    color: rgb(0, 115, 255);
+    background-color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-shadow: 1px 0px rgb(28, 2, 161);
 }
 
 .Component-cell-button-input:hover {
-    background-color: rgb(0, 115, 255);
+    color: rgb(2, 63, 136);
 }
 
 .Component-cell-button-input:active {
-    box-shadow: inset -2px -2px 3px rgba(255, 255, 255, .6),
-                inset 2px 2px 3px rgba(0, 0, 0, .6);
+    color: #168ee9;
+}
+
+.Component-cell-action-button {
+    display: flex;
+    justify-content: space-around;
+    border: 1.5px solid #4416e9;
+    text-align: left;
+    padding: 5px;
 }

@@ -17,10 +17,14 @@ public class GameSummary {
     private UUID id;
     @JsonSchemaTitle("Home")
     private String home;
+    @JsonIgnore
+    private UUID homeTeamId;
     @JsonSchemaTitle("Home Points")
     private int homePoints;
     @JsonSchemaTitle("Visitor")
     private String visitor;
+    @JsonIgnore
+    private UUID visitorTeamId;
     @JsonSchemaTitle("Visitor Points")
     private int visitorPoints;
     @JsonSchemaTitle("Game Time")

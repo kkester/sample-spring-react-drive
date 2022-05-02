@@ -26,22 +26,24 @@ public class GameLinkConstants {
 
     public static final DriveLink TEAM_GAMES_LINK = DriveLink.builder()
             .href("/teams/%s/games")
-            .title("Team Games")
+            .title("Games")
             .build();
 
-    static Map<String, DriveLink> gameViewLink(UUID gameId) {
+    public static Map<String, DriveLink> gameViewLinks(UUID gameId, UUID homeTeamId, String homeTeam, UUID visitorTeamId, String visitorTeam) {
         return DriveLink.of(
-                "game", GAME_LINK.applyTitleAndVariables("view", gameId)
+                "game", GAME_LINK.applyTitleAndVariables("view", gameId),
+                "home", TEAM_LINK.applyTitleAndVariables(homeTeam, homeTeamId),
+                "visitor", GAME_LINK.applyTitleAndVariables(visitorTeam, visitorTeamId)
         );
     }
 
-    static Map<String, DriveLink> teamGameViewLink(UUID teamId, UUID gameId) {
+    public static Map<String, DriveLink> teamGameViewLink(UUID teamId, UUID gameId, String result) {
         return DriveLink.of(
-                "game", TEAM_GAME_LINK.applyTitleAndVariables("view", teamId, gameId)
+                "result", TEAM_GAME_LINK.applyTitleAndVariables(result, teamId, gameId)
         );
     }
 
-    static Map<String, DriveLink> gameLinks() {
+    public static Map<String, DriveLink> gameLinks() {
         return DriveLink.of("home", HOME_LINK, "games", GAMES_LINK);
     }
 

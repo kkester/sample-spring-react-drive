@@ -40,7 +40,7 @@ export const mapFieldGroupRow = (
         {rows}
 
         {arrayAttributes.length > 0 &&
-                <FieldGroupRow key={schema.id + 'items-row'}
+                <FieldGroupRow key={key + 'items-row'}
                     attributes={arrayAttributes}
                     clickHandler={clickHandler}
                     dataChangeHandler={dataChangeHandler} />}
