@@ -3,6 +3,7 @@ import './MainTextField.css';
 import './MainOptionsBox.css';
 import './MainDateField.css';
 import './MainFieldGroupRow.css';
+import './MainTable.css';
 
 import { ApiErrors, deleteResource, DriveResource, getResource, Link, saveResource, updateResource } from "../api/DriveApi";
 import { useEffect, useState } from 'react';
@@ -16,7 +17,7 @@ export const Main = () => {
     const [shouldShowModal, setShouldShowModal] = useState<boolean>(false);
 
     useEffect(() => {
-        getResource("/league")
+        getResource("/places")
             .then(response => { setDriveResource(response) });
     }, [])
 
@@ -61,7 +62,7 @@ export const Main = () => {
                     </label>
                 </div>
             </Modal>}
-            {driveResource && <FormLayout driveResource={driveResource}
+            {driveResource && <FormLayout key={driveResource.schema?.title} driveResource={driveResource}
                 errors={errors}
                 clickHandler={toggleClickHandler}
                 dataChangeHandler={handleDataChange} />}

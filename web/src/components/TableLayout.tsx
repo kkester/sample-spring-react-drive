@@ -1,5 +1,5 @@
 import { Link, Schema, SchemaProperty, SchemaPropertySet } from "../api/DriveApi";
-import { resolveSchema, ResourceAttribute } from "../api/ResourceDataApi";
+import { resolveSchema, ResourceAttribute } from "../api/ResourceFunctions";
 import { TableHeader } from "./TableHeader";
 import { TableRow } from "./TableRow";
 
@@ -66,7 +66,7 @@ const TableLayout = (props: {
     const labelId = id + '-label';
 
     const rows: React.ReactNode[] = rowItems && rowItems.map((rowItem, i) => (
-        <TableRow key={id + '-row-' + i}
+          <TableRow key={id + '-row-' + i}
             id={id + '-row-' + i}
             item={rowItem}
             schemaProps={schemaProps}

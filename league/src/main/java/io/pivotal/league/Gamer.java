@@ -108,6 +108,7 @@ public class Gamer {
         if (player.getHighestRating() < player.getRating()) {
             player.setHighestRating(player.getRating());
         }
+        player.setScored(true);
 
         player.setPoints(player.getPoints() + 1);
         if (home) {
@@ -115,7 +116,6 @@ public class Gamer {
         } else {
             game.setVisitingTeamPoints(game.getVisitingTeamPoints() + 1);
         }
-        player.setScored(true);
     }
 
     private void processMissedShot(PlayerEntity player) {
@@ -124,6 +124,8 @@ public class Gamer {
             player.setScored(true);
         } else if (!player.isScored() && player.getRating() > 2) {
             player.setRating(player.getRating() - 1);
+            player.setScored(false);
+        } else {
             player.setScored(false);
         }
         if (player.getLowestRating() > player.getRating()) {

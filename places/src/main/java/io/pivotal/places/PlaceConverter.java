@@ -26,10 +26,11 @@ public class PlaceConverter {
         return Place.builder()
                 .id(placeEntity.getId())
                 .country(placeEntity.getCountry())
-                .visited(placeEntity.getVisited())
                 .city(placeEntity.getCity())
                 .state(placeEntity.getState())
                 .auditDetails(AuditDetails.builder()
+                        .visited(placeEntity.getVisited())
+                        .plannedVisitDate(placeEntity.getPlannedVisitDate())
                         .lastUpdatedDate(placeEntity.getLastUpdatedDate())
                         .createdDate(placeEntity.getCreatedDate())
                         .build())
@@ -45,6 +46,7 @@ public class PlaceConverter {
                 .lastUpdatedDate(LocalDate.now())
                 .createdDate(LocalDate.now())
                 .description(place.getDescription())
+                .plannedVisitDate(place.getPlannedVisitDate())
                 .hasBeenVisited(false)
                 .build();
     }

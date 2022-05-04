@@ -3,10 +3,7 @@ package io.pivotal.places;
 
 import io.pivotal.common.error.ApplicationException;
 import io.pivotal.places.model.PlaceEntity;
-import io.pivotal.places.view.NewPlace;
-import io.pivotal.places.view.Place;
-import io.pivotal.places.view.PlaceSummaries;
-import io.pivotal.places.view.PlaceSummary;
+import io.pivotal.places.view.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -59,12 +56,14 @@ public class PlacesService {
         PlaceEntity placeEntity = placeRepository.findById(id)
                 .orElseThrow(() -> ApplicationException.resourceNotFound("Place Not Found"));
 
+        AuditDetails auditDetails = place.getAuditDetails();
         placeEntity.setCity(place.getCity());
         placeEntity.setCountry(place.getCountry());
         placeEntity.setDescription(place.getDescription());
-        placeEntity.setVisited(place.getVisited());
-        placeEntity.setHasBeenVisited(place.getVisited() != null);
         placeEntity.setState(place.getState());
+        placeEntity.setVisited(auditDetails.getVisited());
+        placeEntity.setHasBeenVisited(auditDetails.getVisited() != null);
+        placeEntity.setPlannedVisitDate(auditDetails.getPlannedVisitDate());
         placeEntity.setLastUpdatedDate(LocalDate.now());
 
         placeRepository.save(placeEntity);

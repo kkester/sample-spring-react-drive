@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Getter
 @Builder
@@ -26,4 +27,8 @@ public class NewPlace {
 
     @JsonSchemaTitle("Description")
     private String description;
+
+    @JsonSchemaTitle("Planned Visit Date")
+    @NotNull(message = "Planned Visit Date is required")
+    private LocalDate plannedVisitDate;
 }

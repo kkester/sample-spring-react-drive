@@ -55,9 +55,13 @@ export const mapResourceAttribute = (
     propSchema: Schema,
     schemaProperty: SchemaProperty,
     data: { [name: string]: any; },
-    attributeErrors: ApiErrorSet): ResourceAttribute => {
+    attributeErrors: ApiErrorSet,
+    parentKey?: string): ResourceAttribute => {
 
     const required: string[] = schema.required ? schema.required : [];
+    const propRequired: string[] = propSchema.required ? propSchema.required : [];
+    const hasError: boolean = parentKey === undefined ? 
+        attributeErrors[key] !== undefined : attributeErrors[parentKey +'.'+ key] !== undefined;
 
     return {
         name: key,
@@ -65,7 +69,7 @@ export const mapResourceAttribute = (
         propSchema: propSchema,
         schemaProperty: schemaProperty,
         value: data[key],
-        hasError: attributeErrors[key] !== undefined,
-        required: required.includes(key),
+        hasError: hasError,
+        required: (required.includes(key) || propRequired.includes(key)),
     }
 }

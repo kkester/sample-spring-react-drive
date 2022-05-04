@@ -4,36 +4,3 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
-
-.Component-table-layout-label {
-  color: #d2d0d0ec;
-}
-
-.Component-table-layout {
-  padding: 1%;
-}
-
-.Component-table {
-  font-family: arial, sans-serif;
-  font-size: 1rem;
-  border-collapse: collapse;
-  width: 98%;
-  color: #d2d0d0ec;
-}
-
-.Component-table-header {
-  text-align: left;
-  padding: 8px;
-  background-color: #4416e9;
-  border: 1.5px solid #d2d0d0ec;
-}
-
-.Component-table-row-td {
-  border: 1.5px solid #4416e9;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #7c787890;
-}

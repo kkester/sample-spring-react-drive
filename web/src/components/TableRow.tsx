@@ -1,5 +1,5 @@
 import { Link, Schema, SchemaProperty, SchemaPropertySet } from "../api/DriveApi";
-import { isObject, ResourceAttribute } from "../api/ResourceDataApi";
+import { isObject, ResourceAttribute } from "../api/ResourceFunctions";
 import { mapFieldGroupRow } from "./FieldGroupLayout";
 import { TableCellButton } from "./TableCellButton";
 import { RowItem, RowItemCell } from "./TableLayout";

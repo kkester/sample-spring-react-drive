@@ -5,6 +5,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -54,6 +55,16 @@ public class ControllerAdvice {
                 .build();
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
                 .header(HttpHeaders.ALLOW, supportedMethods)
+                .body(apiErrors);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    ResponseEntity<ApiErrors> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception) {
+        ApiErrors apiErrors = ApiErrors.builder()
+                .code("invalid-request")
+                .description(exception.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(apiErrors);
     }
 }

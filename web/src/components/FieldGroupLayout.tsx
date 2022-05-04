@@ -1,9 +1,9 @@
 import { Schema, SchemaProperty, ApiErrorSet, Link, SchemaPropertySet } from "../api/DriveApi";
-import { isArray, isObject, mapResourceAttribute, resolveSchema, ResourceAttribute } from "../api/ResourceDataApi";
+import { isArray, isObject, mapResourceAttribute, resolveSchema, ResourceAttribute } from "../api/ResourceFunctions";
 import { FieldGroupRow } from "./FieldGroupRow";
 
 export const mapFieldGroupRow = (
-    key: string,
+    parentKey: string,
     index: string | number,
     schema: Schema,
     schemaProperty: SchemaProperty,
@@ -17,7 +17,7 @@ export const mapFieldGroupRow = (
 
     const attributes: ResourceAttribute[] = Object.keys(schemaProperties)
         .filter(key => !isObject(data[key]) && !isArray(data[key]))
-        .map(key => mapResourceAttribute(key, schema, propSchema, schemaProperties[key], data, attributeErrors));
+        .map(key => mapResourceAttribute(key, schema, propSchema, schemaProperties[key], data, attributeErrors, parentKey));
 
     const rows: React.ReactNode[] = Object.keys(schemaProperties)
         .filter(key => isObject(data[key]))
@@ -29,9 +29,9 @@ export const mapFieldGroupRow = (
         .map(key => mapResourceAttribute(key, schema, propSchema, schemaProperties[key], data, {}));
 
     return <>
-        {attributes.length > 0 && <FieldGroupRow key={key + 'row-' + index}
+        {attributes.length > 0 && <FieldGroupRow key={parentKey + 'row-' + index}
             attributes={attributes}
-            name={key}
+            name={parentKey}
             title={schemaProperty.title}
             data={data}
             clickHandler={clickHandler}
@@ -40,7 +40,7 @@ export const mapFieldGroupRow = (
         {rows}
 
         {arrayAttributes.length > 0 &&
-                <FieldGroupRow key={key + 'items-row'}
+                <FieldGroupRow key={parentKey + 'items-row'}
                     attributes={arrayAttributes}
                     clickHandler={clickHandler}
                     dataChangeHandler={dataChangeHandler} />}

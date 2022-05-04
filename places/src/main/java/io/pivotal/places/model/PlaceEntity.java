@@ -36,6 +36,9 @@ public class PlaceEntity {
 
     private boolean hasBeenVisited;
 
+    @NotNull
+    private LocalDate plannedVisitDate;
+
     private LocalDate visited;
 
     private LocalDate createdDate;

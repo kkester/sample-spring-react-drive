@@ -3,15 +3,21 @@
 }
 
 .Component-options-error {
-    padding: 5px;
+    padding: 2px;
     border: 1.5px solid red;
     border-radius: 10px;
 }
 
+.Component-options-required-label {
+    font-size: 1.2rem;
+    color: red;
+}
+
 .Component-options-label {
     line-height: 2;
-    font-size: 1rem;
+    font-size: 1.2rem;
     text-align: left;
+    color: #d2d0d0ec;
 }
 
 .Component-options-input {
@@ -22,7 +28,6 @@
     height: 35px;
     width: 200px;
     background-color: #d2d0d0ec;
-    text-align: center;
     box-shadow: inset 2px 2px 3px rgba(255, 255, 255, .6),
     inset -2px -2px 3px rgba(0, 0, 0, .6);
 }

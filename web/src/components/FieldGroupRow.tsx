@@ -1,5 +1,5 @@
 import { Link, SchemaProperty } from "../api/DriveApi";
-import { ResourceAttribute } from "../api/ResourceDataApi";
+import { ResourceAttribute } from "../api/ResourceFunctions";
 import { DateField } from "./DateField";
 import { OptionsBox } from "./OptionsBox";
 import { TableLayout } from "./TableLayout";

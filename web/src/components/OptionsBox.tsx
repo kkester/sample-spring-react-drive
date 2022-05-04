@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SchemaProperty } from "../api/DriveApi";
-import { ResourceAttribute } from "../api/ResourceDataApi";
+import { ResourceAttribute } from "../api/ResourceFunctions";
 
 const OptionsBox = (props: {
     id: string | number;
@@ -23,10 +23,12 @@ const OptionsBox = (props: {
     const inputId = id + '-input';
     return (
         <div id={id} className="Component-options" >
-            <div id={id+'error'} className={props.attribute.hasError ? "Component-options-error" : "Component-options"} >
-                <label id={labelId} className="Component-options-label">
-                    {title}{props.attribute.required && ' *'}:
-                </label><br />
+            <label id={labelId} className="Component-options-label">
+                {title}:
+            </label>
+            {props.attribute.required &&<label className="Component-options-required-label"> *</label>}
+            <br />
+            <div id={id + 'error'} className={props.attribute.hasError ? "Component-options-error" : "Component-options"} >
                 <select id={inputId} className="Component-options-input" onChange={handleChange} value={value}>
                     <option value=""> -- Select --</option>
                     {options.map(option => (

@@ -1,6 +1,6 @@
 
 import { ApiErrors, ApiErrorSet, DriveResource, Link, Schema, SchemaPropertySet } from "../api/DriveApi";
-import { emptySchema, isArray, isObject, mapResourceAttribute, ResourceAttribute } from "../api/ResourceDataApi";
+import { emptySchema, isArray, isObject, mapResourceAttribute, ResourceAttribute } from "../api/ResourceFunctions";
 import { HttpMethod } from "../api/SampleDriveResources";
 import { ButtonGroupRow } from "./ButtonGroupRow";
 import { mapFieldGroupRow } from "./FieldGroupLayout";

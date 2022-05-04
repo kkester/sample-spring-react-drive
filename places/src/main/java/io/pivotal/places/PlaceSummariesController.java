@@ -42,7 +42,7 @@ public class PlaceSummariesController {
     }
 
     @PutMapping(value = "/places/{id}", produces = DriveMediaType.APPLICATION_DRIVE_PLUS_JSON_VALUE)
-    public DriveDataResource updatePlace(@PathVariable UUID id, @RequestBody Place place) {
+    public DriveDataResource updatePlace(@PathVariable UUID id, @Valid @RequestBody Place place) {
         log.info("Updating place {} with {}", id, place);
         placesService.update(id, place);
         PlaceSummaries placeSummaries = placesService.getPlacesVisited();

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SchemaProperty } from "../api/DriveApi";
-import { isReadOnly, isReadOnlyView, ResourceAttribute } from "../api/ResourceDataApi";
+import { isReadOnly, isReadOnlyView, ResourceAttribute } from "../api/ResourceFunctions";
 
 const DateField = (props: {
     id: string | number;
@@ -24,10 +24,12 @@ const DateField = (props: {
     const inputId = id + '-input';
     return (
         <div key={id} id={id} className="Component-date">
+            <label key={labelId} id={labelId} className="Component-date-label">
+                {title}:
+            </label>
+            {props.attribute.required && <label className="Component-date-required-label"> *</label>}
+            <br />
             <div key={id} id={id} className={props.attribute.hasError ? "Component-date-error" : "Component-date"}>
-                <label key={labelId} id={labelId} className="Component-date-label">
-                    {title}:
-                </label><br />
                 {readOnlyView ?
                     <label id={labelId} className="Component-text-input-view">
                         {value}
