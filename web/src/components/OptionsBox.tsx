@@ -2,7 +2,7 @@ import { useState } from "react";
 import { SchemaProperty } from "../api/DriveApi";
 import { ResourceAttribute } from "../api/ResourceFunctions";
 
-const OptionsBox = (props: {
+export const OptionsBox = (props: {
     id: string | number;
     attribute: ResourceAttribute;
     dataChangeHandler: (name: string, value: any) => void;
@@ -18,18 +18,15 @@ const OptionsBox = (props: {
     const options: string[] = schemaProperty.enum ? schemaProperty.enum : [];
     const title: string = schemaProperty.title ? schemaProperty.title : props.attribute.name;
 
-    const id = props.attribute.name + props.id;
-    const labelId = id + '-label';
-    const inputId = id + '-input';
     return (
-        <div id={id} className="Component-options" >
-            <label id={labelId} className="Component-options-label">
+        <div data-testid={props.attribute.name+props.id} className="Component-options" >
+            <label className="Component-options-label">
                 {title}:
             </label>
             {props.attribute.required &&<label className="Component-options-required-label"> *</label>}
             <br />
-            <div id={id + 'error'} className={props.attribute.hasError ? "Component-options-error" : "Component-options"} >
-                <select id={inputId} className="Component-options-input" onChange={handleChange} value={value}>
+            <div className={props.attribute.hasError ? "Component-options-error" : "Component-options"} >
+                <select className="Component-options-input" onChange={handleChange} value={value}>
                     <option value=""> -- Select --</option>
                     {options.map(option => (
                         <option key={option} value={option}>
@@ -41,5 +38,3 @@ const OptionsBox = (props: {
         </div>
     );
 }
-
-export { OptionsBox };

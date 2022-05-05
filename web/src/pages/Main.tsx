@@ -5,10 +5,9 @@ import './MainDateField.css';
 import './MainFieldGroupRow.css';
 import './MainTable.css';
 
-import { ApiErrors, deleteResource, DriveResource, getResource, Link, saveResource, updateResource } from "../api/DriveApi";
+import { HttpMethod, ApiErrors, deleteResource, DriveResource, getResource, Link, saveResource, updateResource } from "../api/DriveApi";
 import { useEffect, useState } from 'react';
 import { FormLayout } from '../components/FormLayout';
-import { HttpMethod } from '../api/SampleDriveResources';
 import { Modal } from '../components/Modal';
 
 export const Main = () => {
@@ -17,7 +16,7 @@ export const Main = () => {
     const [shouldShowModal, setShouldShowModal] = useState<boolean>(false);
 
     useEffect(() => {
-        getResource("/places")
+        getResource("/league")
             .then(response => { setDriveResource(response) });
     }, [])
 
@@ -58,7 +57,7 @@ export const Main = () => {
             {errors && <Modal shouldShow={shouldShowModal} setShouldShow={setShouldShowModal}>
                 <div>
                     <label>
-                        The error was {errors.code}
+                        {errors.description}
                     </label>
                 </div>
             </Modal>}

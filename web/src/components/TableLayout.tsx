@@ -76,7 +76,7 @@ const TableLayout = (props: {
     ));
 
     return (
-        <div className="Component-table-layout">
+        <div data-testid={props.attribute.name+props.id} className="Component-table-layout">
             {schemaProp.title && <label id={labelId} className="Component-table-layout-label">{schemaProp.title}</label>}
             <table className="Component-table">
                 {headings.length > 1 && <TableHeader key={id + '-header'} id={id + '-header'} headings={headings} includeActions={includeActions} />}

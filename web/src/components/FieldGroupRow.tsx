@@ -25,10 +25,6 @@ export const FieldGroupRow = (props: {
     }
 
     const mapAttribute = (index: number, attribute: ResourceAttribute) => {
-        if (attribute.schemaProperty === undefined) {
-            return <></>;
-        }
-
         const schemaProperty: SchemaProperty = attribute.schemaProperty;
         const key = attribute.name + index;
         if (schemaProperty.format && schemaProperty.format === 'date') {
@@ -44,7 +40,8 @@ export const FieldGroupRow = (props: {
         } else if (['string', 'integer', 'number'].includes(schemaProperty.type)) {
             return <TextField key={key} id={index} attribute={attribute} dataChangeHandler={handleDataChange} />;
         }
-        return <></>;
+        
+        return undefined;
     };
 
     const components: React.ReactNode[] = props.attributes.map((attribute, i) => (
@@ -54,12 +51,12 @@ export const FieldGroupRow = (props: {
     if (components.length < 2) {
         return (<>{components}</>);
     } else if (props.title === undefined) {
-        return <div className="Compontent-field-row">
+        return <div data-testid='field-row' className="Compontent-field-row">
             {components}
         </div>
     }
     return (
-        <div className="Compontent-field-row-section">
+        <div data-testid='field-row-section' className="Compontent-field-row-section">
             {props.title && <label className="Compontent-field-section-label">{props.title}</label>}
             <div className="Compontent-field-section-row">
                 {components}

@@ -1,10 +1,11 @@
-import axios, { AxiosInstance } from "axios";
-import { HttpMethod, companyDriveResource, product1DriveResource, product2DriveResource, product3DriveResource, productsDriveResource } from './SampleDriveResources';
+import { axiosInstance } from './AxiosConfig';
 
-const axiosInstance = (): AxiosInstance =>
-    axios.create({
-        baseURL: "http://localhost:8080",
-    });
+export enum HttpMethod {
+    GET = "GET", 
+    POST = "POST", 
+    PUT = "PUT", 
+    DELETE = "DELETE"
+}
 
 export type Link = {
     href: string;
@@ -66,6 +67,7 @@ export type ApiErrorSet = {
 
 export type ApiErrors = {
     code: string;
+    description: string;
     errors?: ApiErrorSet;
 }
 
@@ -91,17 +93,4 @@ export const deleteResource = (uri: string): Promise<DriveResource> => {
     return axiosInstance()
         .delete(uri)
         .then((response) => response.data);
-}
-
-export const getSampleDriveResource = (href: string): DriveResource => {
-    if (href === "/products") {
-        return productsDriveResource;
-    } else if (href === "/products/1") {
-        return product1DriveResource;
-    } else if (href === "/products/2") {
-        return product2DriveResource;
-    } else if (href === "/products/3") {
-        return product3DriveResource;
-    }
-    return companyDriveResource;
 }

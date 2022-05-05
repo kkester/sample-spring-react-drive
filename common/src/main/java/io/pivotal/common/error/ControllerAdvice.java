@@ -43,6 +43,7 @@ public class ControllerAdvice {
 
         return ApiErrors.builder()
                 .code("invalid-request")
+                .description("Missing Required Fields")
                 .errors(errors)
                 .build();
     }

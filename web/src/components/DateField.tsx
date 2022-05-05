@@ -2,7 +2,7 @@ import { useState } from "react";
 import { SchemaProperty } from "../api/DriveApi";
 import { isReadOnly, isReadOnlyView, ResourceAttribute } from "../api/ResourceFunctions";
 
-const DateField = (props: {
+export const DateField = (props: {
     id: string | number;
     attribute: ResourceAttribute;
     dataChangeHandler: (name: string, value: any) => void;
@@ -14,29 +14,29 @@ const DateField = (props: {
         props.dataChangeHandler(props.attribute.name, event.currentTarget.value);
     }
 
-    const id = props.attribute.name + props.id;
-    const schemaProperty: SchemaProperty = props.attribute.schemaProperty;
-    const readOnly: boolean = isReadOnly(props.attribute);
-    const readOnlyView: boolean = isReadOnlyView(props.attribute);
+    const attribute: ResourceAttribute = props.attribute;
+    const id = attribute.name + props.id;
+    const schemaProperty: SchemaProperty = attribute.schemaProperty;
+    const readOnly: boolean = isReadOnly(attribute);
+    const readOnlyView: boolean = isReadOnlyView(attribute);
     const title: string = schemaProperty.title ? schemaProperty.title : props.attribute.name;
 
     const labelId = id + '-label';
     const inputId = id + '-input';
     return (
-        <div key={id} id={id} className="Component-date">
-            <label key={labelId} id={labelId} className="Component-date-label">
+        <div key={id} data-testid={attribute.name+props.id} className="Component-date">
+            <label key={labelId} className="Component-date-label">
                 {title}:
             </label>
-            {props.attribute.required && <label className="Component-date-required-label"> *</label>}
+            {attribute.required && <label className="Component-date-required-label"> *</label>}
             <br />
-            <div key={id} id={id} className={props.attribute.hasError ? "Component-date-error" : "Component-date"}>
+            <div key={id} className={attribute.hasError ? "Component-date-error" : "Component-date"}>
                 {readOnlyView ?
-                    <label id={labelId} className="Component-text-input-view">
+                    <label className="Component-text-input-view">
                         {value}
                     </label> :
                     <input type="date"
                         key={inputId}
-                        id={inputId}
                         className={readOnly ? "Component-readonly-date-input" : "Component-date-input"}
                         value={value}
                         readOnly={readOnly}
@@ -46,5 +46,3 @@ const DateField = (props: {
         </div>
     );
 }
-
-export { DateField };
