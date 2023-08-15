@@ -1,10 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { HttpMethod, ApiErrors, DriveResource } from "../../api/DriveApi";
+import { HttpMethod, DriveResource } from "../../api/DriveApi";
 import { Main } from "../Main";
 import * as api from "../../api/DriveApi";
 import { act } from "react-dom/test-utils";
 
 const driveResource: DriveResource = {
+    id: 0,
     links: {
         self: {
             href: '/orders',
@@ -55,25 +56,17 @@ const errors = {
 
 const promise = Promise.resolve(driveResource);
 
-it("renders resource response", async () => {
-    const getResourceMock = jest.spyOn(api, "getResource").mockResolvedValue(promise);
-    const saveResourceMock = jest.spyOn(api, "saveResource").mockResolvedValue(promise);
-
-    render(<Main />);
-
-    await act(async () => { await promise })
-    await expect(getResourceMock).toHaveBeenCalledTimes(1);
-
-    expect(screen.getByText("name:")).toBeInTheDocument();
-    const nameInputElement = screen.getByDisplayValue('Chance');
-    expect(nameInputElement).toBeInTheDocument();
-});
-
-describe.only("Main", () => {
+describe("Main", () => {
     beforeEach(async () => {
         jest.spyOn(api, "getResource").mockResolvedValue(promise);
         render(<Main />);
         await act(async () => { await promise })
+    });
+
+    it("renders resource response", async () => {
+        expect(screen.getByText("Orders")).toBeInTheDocument();
+        expect(screen.getByText("name:")).toBeInTheDocument();
+        expect(screen.getByDisplayValue('Chance')).toBeInTheDocument();
     });
 
     it("saves resource changes", async () => {
@@ -92,7 +85,7 @@ describe.only("Main", () => {
         fireEvent.click(saveButtonElement);
 
         await act(async () => { await savePromise })
-        expect(saveResourceMock).toHaveBeenCalledWith('/orders', { name: "Clarence" })
+        expect(saveResourceMock).toHaveBeenCalledWith('/orders', { name: "Clarence" });
     });
 
     it("updates resource changes", async () => {
@@ -110,8 +103,8 @@ describe.only("Main", () => {
 
         fireEvent.click(saveButtonElement);
 
-        await act(async () => { await updatePromise })
-        expect(updateResourceMock).toHaveBeenCalledWith('/orders/id', { name: "Clarence" })
+        await act(async () => { await updatePromise });
+        expect(updateResourceMock).toHaveBeenCalledWith('/orders/id', { name: "Clarence" });
     });
 
     it("deletes resource", async () => {
@@ -129,25 +122,26 @@ describe.only("Main", () => {
 
         fireEvent.click(deleteButtonElement);
 
-        await act(async () => { await deletePromise })
-        expect(deleteResourceMock).toHaveBeenCalledWith('/orders/id')
+        await act(async () => { await deletePromise });
+        expect(deleteResourceMock).toHaveBeenCalledWith('/orders/id');
     });
 
-    // it("handle errors saving resource changes", async () => {
-    //     const errorPromise = Promise.resolve(errors);
-    //     const saveResourceMock = jest.spyOn(api, "saveResource").mockRejectedValueOnce(errorPromise);
+    it("handle errors saving resource changes", async () => {
+        const saveResourceMock = jest.spyOn(api, "saveResource").mockRejectedValueOnce(errors);
 
-    //     const nameInputElement = screen.getByDisplayValue('Chance');
-    //     expect(nameInputElement).toBeInTheDocument();
+        const saveButtonElement = screen.getByText('Save');
+        expect(saveButtonElement).toBeInTheDocument();
 
-    //     fireEvent.change(nameInputElement, { target: { value: 'Clarence' } });
-    //     expect(screen.getByDisplayValue('Clarence')).toBeInTheDocument();
+        await act(() => { fireEvent.click(saveButtonElement) });
 
-    //     const saveButtonElement = screen.getByText('Save');
-    //     expect(saveButtonElement).toBeInTheDocument();
+        expect(screen.getByText('Missing Required Fields')).toBeInTheDocument();
+        const closeButtonElement = screen.getByText('Close');
+        expect(closeButtonElement).toBeInTheDocument();
 
-    //     fireEvent.click(saveButtonElement);
+        fireEvent.click(closeButtonElement);
 
-    //     await act(async () => { await errorPromise })
-    // });
+        const nameTextElement = screen.getByTestId('name0');
+        expect(nameTextElement.children[2]).toHaveClass('Component-text-error');
+        expect(saveResourceMock).toHaveBeenCalledWith("/orders", {"name": "Chance"});
+    });
 });

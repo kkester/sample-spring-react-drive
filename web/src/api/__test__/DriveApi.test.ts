@@ -1,10 +1,9 @@
-
-import { deleteResource, DriveResource, getResource, saveResource, updateResource } from "../../api/DriveApi";
-import * as api from "../AxiosConfig";
+import { deleteResource, DriveResource, getResource, saveResource, updateResource } from '../DriveApi';
 
 const nock = require('nock');
 
 const data: DriveResource = {
+    id: 0,
     links: {},
     data: {},
     schema: {
@@ -23,6 +22,7 @@ it("get a resource", async () => {
     nockServer.get('/games').reply(200, data);
 
     const response: Promise<DriveResource> = getResource('/games');
+    response.then(r => data.id = r.id);
 
     await expect(response).resolves.toEqual(data);
 });

@@ -39,7 +39,7 @@ export type SchemaSet = {
 
 export type Schema = {
     title?: string;
-    type: string;
+    type?: string;
     $ref?: string;
     properties?: SchemaPropertySet;
     definitions?: SchemaSet;
@@ -48,6 +48,7 @@ export type Schema = {
 }
 
 export type DriveResource = {
+    id: number;
     links?: {
         [name: string]: Link;
     },
@@ -71,26 +72,30 @@ export type ApiErrors = {
     errors?: ApiErrorSet;
 }
 
+const injectId = (resource: DriveResource): DriveResource => {
+    return {...resource, id: Date.now()};
+}
+
 export const getResource = (uri: string): Promise<DriveResource> => {
     return axiosInstance()
         .get(uri)
-        .then((response) => response.data);
+        .then((response) => injectId(response.data));
 }
 
 export const saveResource = (uri: string, body: any): Promise<DriveResource> => {
     return axiosInstance()
         .post(uri, body)
-        .then((response) => response.data);
+        .then((response) => injectId(response.data));
 }
 
 export const updateResource = (uri: string, body: any): Promise<DriveResource> => {
     return axiosInstance()
         .put(uri, body)
-        .then((response) => response.data);
+        .then((response) => injectId(response.data));
 }
 
 export const deleteResource = (uri: string): Promise<DriveResource> => {
     return axiosInstance()
         .delete(uri)
-        .then((response) => response.data);
+        .then((response) => injectId(response.data));
 }

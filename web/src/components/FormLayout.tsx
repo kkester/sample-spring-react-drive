@@ -11,6 +11,7 @@ export const FormLayout = (props: {
     clickHandler: (link: Link) => void;
     dataChangeHandler: (name: string, value: any) => void;
 }) => {
+    const key = props.driveResource.id;
     const links = props.driveResource.links ? props.driveResource.links : {};
     const navLinks: Link[] = Object.keys(links).map((linkName) => links[linkName])
         .filter(link => link.method === undefined || link.method === HttpMethod.GET);
@@ -23,27 +24,27 @@ export const FormLayout = (props: {
     const attributeErrors: ApiErrorSet = props.errors && props.errors.errors ? props.errors.errors : {};
 
     const attributes: ResourceAttribute[] = Object.keys(schemaProperties)
-        .filter(key => !isObject(data[key]) && !isArray(data[key]))
-        .map(key => mapResourceAttribute(key, schema, schema, schemaProperties[key], data, attributeErrors));
+        .filter(name => !isObject(data[name]) && !isArray(data[name]))
+        .map(name => mapResourceAttribute(name, schema, schema, schemaProperties[name], data, attributeErrors));
 
     const rows: React.ReactNode[] = Object.keys(schemaProperties)
-        .filter(key => isObject(data[key]))
-        .map((key, i) => mapFieldGroupRow(key, i, schema, schemaProperties[key], data[key],
+        .filter(name => isObject(data[name]))
+        .map((name, i) => mapFieldGroupRow(name, key+'-'+i, schema, schemaProperties[name], data[name],
             attributeErrors, props.clickHandler, props.dataChangeHandler));
 
     const arrayAttributes: ResourceAttribute[] = Object.keys(schemaProperties)
-        .filter(key => isArray(data[key]))
-        .map(key => mapResourceAttribute(key, schema, schema, schemaProperties[key], data, {}));
+        .filter(name => isArray(data[name]))
+        .map(name => mapResourceAttribute(name, schema, schema, schemaProperties[name], data, {}));
 
     return (
         <div className="Compontent-form-layout">
-            <ButtonGroupRow key={schema.title + 'navbar'}
+            <ButtonGroupRow key={key + 'navbar'}
                 clickHandler={props.clickHandler}
                 navBar={true}
                 links={navLinks} />
 
             {attributes.length > 0 &&
-                <FieldGroupRow key={schema.title + 'row-0'}
+                <FieldGroupRow key={key + 'row-0'}
                     attributes={attributes}
                     clickHandler={props.clickHandler}
                     dataChangeHandler={props.dataChangeHandler} />}
@@ -51,12 +52,12 @@ export const FormLayout = (props: {
             {rows}
 
             {arrayAttributes.length > 0 &&
-                <FieldGroupRow key={schema.title + 'items-row'}
+                <FieldGroupRow key={key + 'items-row'}
                     attributes={arrayAttributes}
                     clickHandler={props.clickHandler}
                     dataChangeHandler={props.dataChangeHandler} />}
 
-            <ButtonGroupRow key={schema.title + 'ops'}
+            <ButtonGroupRow key={key + 'ops'}
                 clickHandler={props.clickHandler}
                 links={crudLinks} />
         </div>

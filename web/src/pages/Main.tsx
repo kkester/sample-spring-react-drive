@@ -12,44 +12,57 @@ import { Modal } from '../components/Modal';
 
 export const Main = () => {
     const [driveResource, setDriveResource] = useState<DriveResource>();
+    const [driveResourceUpdated, setDriveResourceUpdated] = useState<DriveResource>();
     const [errors, setErrors] = useState<ApiErrors | undefined>(undefined);
     const [shouldShowModal, setShouldShowModal] = useState<boolean>(false);
 
     useEffect(() => {
-        getResource("/league")
-            .then(response => { setDriveResource(response) });
+        getResource("/places")
+            .then(response => {
+                setDriveResource(response);
+                setDriveResourceUpdated(response);
+            });
     }, [])
 
-    const handleErrors = (errors: ApiErrors) => {
-        setErrors(errors);
+    const handleErrors = (newErrors: ApiErrors) => {
+        setErrors(newErrors);
         setShouldShowModal(true);
+    }
+
+    const applyDriveResource = (response: DriveResource) => {
+        setDriveResource(response);
+        setDriveResourceUpdated(response);
     }
 
     const toggleClickHandler = (link: Link) => {
         setErrors(undefined);
         const linkMethod: HttpMethod = link.method ? link.method : HttpMethod.GET;
+
         if (HttpMethod.DELETE === linkMethod) {
             deleteResource(link.href)
-                .then(response => setDriveResource(response))
+                .then(response => applyDriveResource(response))
                 .catch(error => handleErrors(error.response.data));
         } else if (HttpMethod.GET === linkMethod) {
             getResource(link.href)
-                .then(response => setDriveResource(response))
+                .then(response => applyDriveResource(response))
                 .catch(error => handleErrors(error.response.data));
         } else if (driveResource && HttpMethod.POST === linkMethod) {
-            saveResource(link.href, driveResource.data)
-                .then(response => setDriveResource(response))
+            const resource = driveResourceUpdated ? driveResourceUpdated : driveResource;
+            saveResource(link.href, resource.data)
+                .then(response => applyDriveResource(response))
                 .catch(error => handleErrors(error.response.data));
         } else if (driveResource && HttpMethod.PUT === linkMethod) {
-            updateResource(link.href, driveResource.data)
-                .then(response => setDriveResource(response))
+            const resource = driveResourceUpdated ? driveResourceUpdated : driveResource;
+            updateResource(link.href, resource.data)
+                .then(response => applyDriveResource(response))
                 .catch(error => handleErrors(error.response.data));
         }
     }
 
     const handleDataChange = (attributeName: string, attributeValue: any) => {
-        const data = { ...driveResource?.data, [attributeName]: attributeValue };
-        setDriveResource({ ...driveResource, data: data });
+        const resource = driveResourceUpdated ? driveResourceUpdated : driveResource;
+        const data = { ...resource?.data, [attributeName]: attributeValue };
+        setDriveResourceUpdated({ ...resource, id: Date.now(), data: data });
     }
 
     return (
@@ -61,7 +74,8 @@ export const Main = () => {
                     </label>
                 </div>
             </Modal>}
-            {driveResource && <FormLayout key={driveResource.schema?.title} driveResource={driveResource}
+            {driveResource && <FormLayout key={driveResource.id}
+                driveResource={driveResource}
                 errors={errors}
                 clickHandler={toggleClickHandler}
                 dataChangeHandler={handleDataChange} />}

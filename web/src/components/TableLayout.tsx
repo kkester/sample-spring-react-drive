@@ -51,6 +51,10 @@ const TableLayout = (props: {
     dataChangeHandler: (name: string, value: any) => void;
     clickHandler: (link: Link) => void;
 }) => {
+    if (props.attribute.value === undefined) {
+        return (<></>);
+    }
+
     const schemaProp: SchemaProperty = props.attribute.schemaProperty;
     const itemsSchema: Schema = resolveSchema(props.attribute.schema, schemaProp);
     const schemaProps: SchemaPropertySet = itemsSchema.properties ? itemsSchema.properties : {};
@@ -63,10 +67,8 @@ const TableLayout = (props: {
     const includeActions: boolean = rowItems && rowItems.filter(rowItem => rowItem.links.length > 0).length > 0;
 
     const id = props.attribute.name + props.id;
-    const labelId = id + '-label';
-
     const rows: React.ReactNode[] = rowItems && rowItems.map((rowItem, i) => (
-          <TableRow key={id + '-row-' + i}
+        <TableRow key={id + '-row-' + i}
             id={id + '-row-' + i}
             item={rowItem}
             schemaProps={schemaProps}
@@ -77,7 +79,7 @@ const TableLayout = (props: {
 
     return (
         <div data-testid={props.attribute.name+props.id} className="Component-table-layout">
-            {schemaProp.title && <label id={labelId} className="Component-table-layout-label">{schemaProp.title}</label>}
+            {schemaProp.title && <label className="Component-table-layout-label">{schemaProp.title}</label>}
             <table className="Component-table">
                 {headings.length > 1 && <TableHeader key={id + '-header'} id={id + '-header'} headings={headings} includeActions={includeActions} />}
                 <tbody>
